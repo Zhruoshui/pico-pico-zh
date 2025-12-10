@@ -1,49 +1,48 @@
-# Project Template with `cargo-generate`
+# 项目模板 - 使用 `cargo-generate`
 
-"cargo-generate is a developer tool to help you get up and running quickly with a new Rust project by leveraging a pre-existing git repository as a template."
+`cargo-generate` 是一个便捷工具，能通过使用已有的 Git 仓库作为模板，快速创建新的 Rust 项目。
 
-Read more about [here](https://github.com/cargo-generate/cargo-generate).
+更多信息请参见：https://github.com/cargo-generate/cargo-generate
  
-## Prerequisites
+## 前置要求
 
-Before starting, ensure you have the following tools installed:
+开始之前，请确保已安装以下工具：
 
 - [Rust](https://www.rust-lang.org/tools/install)
-- [cargo-generate](https://github.com/cargo-generate/cargo-generate) for generating the project template.
+- [cargo-generate](https://github.com/cargo-generate/cargo-generate)（用于生成项目模板）
 
-
-Install the OpenSSL development package first because it is required by cargo-generate:
+先安装 OpenSSL 开发包，因为 `cargo-generate` 依赖它：
 ```sh
-sudo apt install  libssl-dev
+sudo apt install libssl-dev
 ```
 
-You can install `cargo-generate` using the following command:
+你可以通过下面的命令安装 `cargo-generate`：
 
 ```sh
 cargo install cargo-generate
 ```
 
-## Step 1: Generate the Project
-Run the following command to generate the project from the template:
+## 第 1 步：生成项目
+运行下面命令，从模板生成项目：
 
 ```sh
-cargo generate --git https://github.com/ImplFerris/pico2-template.git --tag v0.3.1
+cargo generate --git https://github.com/ImplFerris/pico2-template.git
 ```
 
-This will prompt you to answer a few questions:
-Project name: Name your project.
-HAL choice: You can choose between embassy or rp-hal.
+执行后会提示你回答几个问题：
+- Project name：为项目命名。
+- HAL choice：可在 `embassy` 或 `rp-hal` 之间选择。
 
-## Step 2: Default LED Blink Example
-By default, the project will be generated with a simple LED blink example. The code structure may look like this:
+## 第 2 步：默认的 LED 闪烁示例
+默认生成的项目中包含一个简单的 LED 闪烁示例。项目结构可能类似：
 
-`src/main.rs`: Contains the default blink logic.
+`src/main.rs`：包含默认的闪烁逻辑。
 
-`Cargo.toml`: Includes dependencies for the selected HAL.
+`Cargo.toml`：包含为所选 HAL 添加的依赖项。
 
-## Step 3: Choose Your HAL and Modify Code
-Once the project is generated, you can decide to keep the default LED blink code or remove it and replace it with your own code based on the HAL you selected.
+## 第 3 步：选择 HAL 并修改代码
+项目生成后，你可以保留默认的 LED 示例，也可以将其删除并根据所选 HAL 替换为自己的代码。
 
-## Removing Unwanted Code
-You can remove the blink logic from src/main.rs and replace it with your own code. Modify the Cargo.toml dependencies and project structure as needed for your project.
+## 移除不需要的代码
+可以从 `src/main.rs` 中删掉示例的闪烁逻辑，并按需替换。根据项目需要修改 `Cargo.toml` 的依赖与项目结构。
 

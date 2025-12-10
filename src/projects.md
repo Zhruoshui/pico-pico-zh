@@ -1,8 +1,8 @@
-# Curated List of Projects Written in Rust for Raspberry Pi Pico 2
+# 为树莓派 Pico 2 编写的 Rust 精选项目列表
 
-Here is a curated list of projects I found online that are interesting and related to Pico 2 and Rust.  If you have some interesting projects to showcase, please send a PR :)
+这是一个精选的项目列表，我在线找到的这些项目很有趣且与 Pico 2 和 Rust 相关。如果你有一些有趣的项目要展示，请发送 PR :)
 
-- [Pico Rex](https://github.com/ImplFerris/pico-rex): Dinosaur Game written in Rust for the Raspberry Pi Pico 2 (RP2350) with an OLED display, using the Embassy framework.
-- [GB-RP2350 A Game Boy emulator for the Pi Pico 2 written in Rust](https://github.com/Altaflux/gb-rp2350): You can also find the reddit post by the OP [here](https://www.reddit.com/r/raspberrypipico/comments/1h6hb3l/gbrp2350_a_game_boy_emulator_for_the_pi_pico_2/). 
-- [simple-robot](https://github.com/1-rafael-1/simple-robot): A very simple robot with HC-SR04 distance sensor and autonomous as well as remote controlled movement written in Rust(Embassy)
+- [Pico Rex](https://github.com/ImplFerris/pico-rex): 用 Rust 为树莓派 Pico 2 (RP2350) 编写的恐龙游戏，带有 OLED 显示屏，使用 Embassy 框架。
+- [GB-RP2350 树莓派 Pico 2 的游戏男孩模拟器，用 Rust 编写](https://github.com/Altaflux/gb-rp2350): 你也可以找到 OP 的 reddit 帖子[在这里](https://www.reddit.com/r/raspberrypipico/comments/1h6hb3l/gbrp2350_a_game_boy_emulator_for_the_pi_pico_2/)。 
+- [simple-robot](https://github.com/1-rafael-1/simple-robot): 一个非常简单的机器人，配备 HC-SR04 距离传感器和自主以及远程控制运动，用 Rust(Embassy) 编写
 

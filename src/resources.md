@@ -1,15 +1,15 @@
-# Useful resources
+# 有用的资源
 
-This section will include a list of resources I find helpful along the way.
+本部分将包括我发现有帮助的资源列表。
 
-## Blog Posts
-- [RP2350 Launch Blog by theJPster](https://thejpster.org.uk/blog/blog-2024-08-08/)
+## 博客文章
+- [RP2350 发布博客，由 theJPster 发布](https://thejpster.org.uk/blog/blog-2024-08-08/)
 
-## Tutorials
+## 教程
 
-- [Official Raspberry Pi Pico guide](https://projects.raspberrypi.org/en/projects/introduction-to-the-pico/0)
+- [官方树莓派 Pico 指南](https://projects.raspberrypi.org/en/projects/introduction-to-the-pico/0)
 
-## Other resources
-- [Curated list of resources for Embedded Rust](https://github.com/rust-embedded/awesome-embedded-rust)
-- [Writing an OS in Rust ](https://os.phil-opp.com/): many useful concepts explained here
-- [Embassy Book](https://embassy.dev/book/)
+## 其他资源
+- [嵌入式 Rust 的精选资源列表](https://github.com/rust-embedded/awesome-embedded-rust)
+- [用 Rust 编写 OS](https://os.phil-opp.com/): 这里解释了许多有用的概念
+- [Embassy 书](https://embassy.dev/book/)

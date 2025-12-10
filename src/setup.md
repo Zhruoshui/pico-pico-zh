@@ -1,40 +1,40 @@
-# Setup
+# 环境配置
 
 ## Picotool
-picotool is a tool for working with RP2040/RP2350 binaries, and interacting with RP2040/RP2350 devices when they are in BOOTSEL mode.
+`picotool` 是一个用于操作 RP2040/RP2350 二进制文件的工具，在设备进入 BOOTSEL 模式时可与其交互。
 
-[Picotool Repo](https://github.com/raspberrypi/picotool)
+[Picotool 仓库](https://github.com/raspberrypi/picotool)
 
 <div class="alert-box alert-box-info">
     <span class="icon"><i class="fa-solid fa-info"></i></span>
     <div class="alert-content">
-        <b class="alert-title">Pre-built binaries</b>
-        <p>Alternatively, you can download the pre-built binaries of the SDK tools from <a href="https://github.com/raspberrypi/pico-sdk-tools">here</a>, which is a simpler option than following these steps.</p>
+        <b class="alert-title">预编译二进制</b>
+        <p>你也可以直接从 <a href="https://github.com/raspberrypi/pico-sdk-tools">这里</a> 下载 SDK 工具的预编译版本，这通常比按步骤构建更为简单。</p>
     </div>
 </div>
 
 
-Here's a quick summary of the steps I followed:
+下面是我采用的快速安装步骤摘要：
 ```sh
-# Install dependencies
+# 安装依赖
 sudo apt install build-essential pkg-config libusb-1.0-0-dev cmake
 
 mkdir embedded && cd embedded
 
-# Clone the Pico SDK
+# 克隆 Pico SDK
 git clone https://github.com/raspberrypi/pico-sdk
 cd pico-sdk
 git submodule update --init lib/mbedtls
 cd ../
 
-# Set the environment variable for the Pico SDK
+# 设置 Pico SDK 的环境变量
 PICO_SDK_PATH=/MY_PATH/embedded/pico-sdk
 
-# Clone the Picotool repository
+# 克隆 Picotool 仓库
 git clone https://github.com/raspberrypi/picotool
 ```
 
-Build and install Picotool
+编译并安装 Picotool：
 ```sh
 cd picotool
 mkdir build && cd build
@@ -44,40 +44,40 @@ make -j8
 sudo make install
 ```
 
-On Linux you can add udev rules in order to run picotool without sudo:
+在 Linux 上，你可以添加 udev 规则以便无需 sudo 即可运行 picotool：
 ```sh
 cd ../
-# In picotool cloned directory
+# 在 picotool 克隆目录下
 sudo cp udev/60-picotool.rules /etc/udev/rules.d/
 ```
 
 
-## Rust Targets
-To build and deploy Rust code for the RP2350 chip, you'll need to add the appropriate targets:
+## Rust 目标三元组
+要为 RP2350 芯片构建并部署 Rust 代码，需要添加相应的目标：
 
 ```sh
 rustup target add thumbv8m.main-none-eabihf
 rustup target add riscv32imac-unknown-none-elf
 ```
 
-## probe-rs - Flashing and Debugging Tool
+## probe-rs —— 烧录与调试工具
 
-probe-rs is a modern, Rust-native toolchain for flashing and debugging embedded devices. It supports ARM and RISC-V targets and works directly with hardware debug probes. When you use a Debug Probe with the Pico 2, probe-rs is the tool you rely on for both flashing firmware and debugging.
+`probe-rs` 是一套现代的、原生 Rust 的嵌入式烧录与调试工具链，它同时支持 ARM 与 RISC-V 平台，并可以直接与硬件调试探针配合使用。对于使用 Debug Probe 的 Pico 2，`probe-rs` 是进行烧录和调试的常用工具。
  
-Install probe-rs using the official installer script:
+使用官方安装脚本安装 probe-rs：
 
 ```bash
 curl -LsSf https://github.com/probe-rs/probe-rs/releases/latest/download/probe-rs-tools-installer.sh | sh
 ```
 
-For latest installation instructions, better refer to the [official probe-rs documentation](https://probe.rs/).
+有关最新安装说明，请参考 [probe-rs 官方文档](https://probe.rs/)。
 
-By default, debug probes on Linux can only be accessed with root privileges. To avoid using sudo for every command, you should install the appropriate udev rules that allow regular users to access the probe. Follow the instructions provided [here](https://probe.rs/docs/getting-started/probe-setup/).
+默认情况下，Linux 上的调试探针只能由 root 访问。为了避免每次都使用 sudo，建议安装相应的 udev 规则，使普通用户也能访问探针。请按照[此处](https://probe.rs/docs/getting-started/probe-setup/)的步骤进行配置。
 
-**Quick summary:**
-1. [Download the udev rules](https://probe.rs/files/69-probe-rs.rules) file from the probe-rs repository
-2. Copy it to `/etc/udev/rules.d/`
-3. Reload udev rules with `sudo udevadm control --reload`
-4. Unplug and replug your Debug Probe
+**快速摘要：**
+1. 从 probe-rs 仓库下载 udev 规则文件（[69-probe-rs.rules](https://probe.rs/files/69-probe-rs.rules)）
+2. 将其复制到 `/etc/udev/rules.d/`
+3. 使用 `sudo udevadm control --reload` 重新加载规则
+4. 拔掉并重新插入 Debug Probe
 
-After this setup, you can use probe-rs without root privileges.
+完成上述配置后，你就可以在无需 root 权限的情况下使用 `probe-rs` 了。

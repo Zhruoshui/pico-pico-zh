@@ -1,49 +1,48 @@
-# Running the program
-Before we explore further examples, let's cover the general steps to build and run any program on the Raspberry Pi Pico 2. The Pico 2 contains both ARM Cortex-M33 and Hazard3 RISC-V processors, and we'll provide instructions for both architectures.
+# 运行程序
+在深入其他示例之前，我们先覆盖在 Raspberry Pi Pico 2 上构建并运行任意程序的一般步骤。Pico 2 包含 ARM Cortex-M33 与 Hazard3 RISC-V 两类处理器，这里会给出两种架构的构建说明。
 
-Note: These commands should be run from your project folder. This is included here as a general step to avoid repetition. If you haven't created a project yet, begin with the Quick Start or Blink LED section.
+注意：下列命令应在你的项目目录中执行。若尚未创建项目，请先参阅“快速上手”或“Blink LED”章节。
 
-## Build and Run for ARM
-Use this command to build and run programs on the Raspberry Pi Pico 2 in ARM mode, utilizing the Cortex-M33 processors.
+## 在 ARM 模式下构建与运行
+使用下面的命令为 Pico 2 的 ARM 模式（Cortex-M33）构建程序：
 
 ```sh
-# build the program
+# 构建程序
 cargo build --target=thumbv8m.main-none-eabihf
 ```
 
-To Flash your application onto the Pico 2, press and hold the BOOTSEL button. While holding it, connect the Pico 2 to your computer using a micro USB cable. You can release the button once the USB is plugged in.
+要将应用刷入 Pico 2，请按住 BOOTSEL 按钮，同时用 Micro USB 将设备连接到电脑。USB 插入后即可松开按钮。
 
 <img style="display: block; margin: auto;" alt="bootsel" src="./images/bootsel.png"/>
 
 ```sh
-# Run the program
+# 运行程序
 cargo run --target=thumbv8m.main-none-eabihf
 ```
 
-**Note:** The example codes include a runner configuration in the `.cargo/config.toml` file, defined as:  
-`runner = "picotool load -u -v -x -t elf"`.  This means that when you execute `cargo run`, it actually invokes the `picotool` with the `load` subcommand to flash the program.
+**说明：** 示例工程中在 `.cargo/config.toml` 中配置了 runner，例如：  
+`runner = "picotool load -u -v -x -t elf"`。这意味着执行 `cargo run` 时会调用 `picotool load` 子命令来刷写程序。
 
 
-## Build and Run for RISC-V
+## 在 RISC-V 模式下构建与运行
+使用下面的命令为 Pico 2 的 RISC‑V 模式（Hazard3）构建程序。
 
-Use this command to build and run programs on the Raspberry Pi Pico 2 n RISC-V mode, utilizing the Hazard3 processors.
-
-> Note: This book focuses on ARM examples. Some examples may need changes before they work on RISC V mode. For simplicity, it is recommended to follow the ARM workflow while reading this book.
+> 注意：本书以 ARM 示例为主；部分示例在 RISC‑V 下可能需作调整。若想简化学习流程，建议优先按照 ARM 工作流进行操作。
 
 ```sh
-# build the program
+# 构建程序
 cargo build --target=riscv32imac-unknown-none-elf
 ```
 
-Follow the same BOOTSEL steps as described above.
+按照前述 BOOTSEL 步骤把设备置于刷写模式，然后执行：
 ```sh
-# Run the program
+# 运行程序
 cargo run --target=riscv32imac-unknown-none-elf
 ```
 
-## With Debug Probe
+## 使用 Debug Probe
 
-When using a Debug Probe, you can flash your program directly onto the Pico 2 with:
+使用 Debug Probe 时，可以直接将程序刷入 Pico 2：
 
 ```sh
 # cargo flash --chip RP2350
@@ -51,7 +50,7 @@ When using a Debug Probe, you can flash your program directly onto the Pico 2 wi
 cargo flash --release
 ```
 
-If you want to flash your program and also view its output in real time, use:
+若希望在刷写的同时查看实时输出，可使用：
 
 ```sh
 # cargo embed --chip RP2350
@@ -59,4 +58,4 @@ If you want to flash your program and also view its output in real time, use:
 cargo embed --release
 ```
 
-[cargo-embed](https://probe.rs/docs/tools/cargo-embed/) is a more advanced version of cargo-flash. It can flash your program, and it can also open an RTT terminal and a GDB server.
+[cargo-embed](https://probe.rs/docs/tools/cargo-embed/) 是比 `cargo-flash` 更强大的工具，既能刷写程序，也能打开 RTT 终端与 GDB 服务。

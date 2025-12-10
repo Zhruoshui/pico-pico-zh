@@ -1,145 +1,143 @@
-# Raspberry Pi Pico 2 Pinout Diagram
+# Raspberry Pi Pico 2 引脚图
 
-> **Note:** You don't need to memorize or understand every pin right now. We will refer back to this section as needed while working through the exercises in this book.
+> **注意：** 现在无需记住或理解每一个引脚。在完成本书的练习时，我们会随时回到这一节。
 
 ![Raspberry Pi Pico 2 Pinout Diagram](./images/raspberry-pi-pico2-rp2350-pinout-diagram.png)
 
-## Power Pins
+## 电源引脚
 
-Power pins are essential for keeping your Raspberry Pi Pico 2 running and supplying electricity to the sensors, LEDs, motors, and other components you connect to it. 
+电源引脚对 Raspberry Pi Pico 2 至关重要，它们既为开发板供电，也为连接的传感器、LED、马达等外设提供电力。
 
-The Raspberry Pi Pico 2 has the following power pins. These are marked in red (power) and black (ground) in the pinout diagrams. These pins are used to supply power to the board and to external components.
+Pico 2 具有如下电源引脚。它们在引脚图中以红色（电源）和黑色（地）标记，可用于为板子或外部器件供电。
 
-- **VBUS** is connected to the 5V coming from the USB port. When the board is powered over USB, this pin will carry about 5V. You can use it to power small external circuits, but it's not suitable for high-current loads.
+- **VBUS** 连接到来自 USB 端口的 5V。当通过 USB 供电时，该引脚大约为 5V。它可用于为小型外设供电，但不适合大电流负载。
 
-- **VSYS** is the main power input for the board. You can connect a battery or regulated supply here with a voltage between 1.8V and 5.5V. This pin powers the onboard 3.3V regulator, which supplies the RP2350 and other parts.
+- **VSYS** 是板子的主电源输入，可连接电池或稳压电源，电压范围为 1.8V 到 5.5V。该引脚为板载 3.3V 稳压器供电，进而为 RP2350 等部件供电。
 
-- **3V3(OUT)** provides a stable 3.3V output from the onboard regulator. It can be used to power external components like sensors or displays, but it's best to limit the current draw to under 300mA.
+- **3V3(OUT)** 提供来自板载稳压器的稳定 3.3V 输出，可用于为传感器或显示屏等外设供电，但建议将电流限制在 300mA 以内。
 
-- **GND** pins are used to complete electrical circuits and are connected to the system ground. The Pico 2 provides multiple GND pins spread across the board for convenience when connecting external devices.
+- **GND** 引脚用于完成电路并连接到系统接地。Pico 2 在板上提供多个 GND 引脚，便于连接外设时接地。
 
 
-## GPIO Pins
+## GPIO 引脚
 
-When you want your microcontroller(i.e Pico) to interact with the world; like turning on lights, reading button presses, sensing temperature, or controlling motors; you need a way to connect and communicate with these external components. That's exactly what GPIO pins do: they're your Raspberry Pi Pico 2's connection points to external components.
+当你希望微控制器（例如 Pico）与外界交互，如点亮灯、读取按键、感知温度或控制电机时，就需要通过 GPIO 引脚连接这些外部器件。GPIO 引脚就是 Raspberry Pi Pico 2 与外设之间的连接点。
 
-The Raspberry Pi Pico 2 includes 26 General Purpose Input/Output (GPIO) pins, labeled GPIO0 through GPIO29, though not all numbers are exposed on the headers. These GPIOs are highly flexible and can be used to read inputs like switches or sensors, or to control outputs such as LEDs, motors, or other devices.
+Pico 2 提供 26 个通用输入/输出（GPIO）引脚，标号为 GPIO0 到 GPIO29，尽管并非所有标号都在排针上暴露。这些引脚高度灵活，可用于读取开关或传感器等输入，也可用于控制 LED、马达等输出。
 
-All GPIOs operate at 3.3V logic. This means any input signal you connect should not exceed 3.3 volts, or you risk damaging the board. While many GPIOs support basic digital I/O, some also support additional functions like analog input (ADC), or act as communication lines for protocols like I2C, SPI, or UART.
+所有 GPIO 的逻辑电平为 3.3V。因此接入的输入信号不应超过 3.3V，否则可能损坏开发板。许多 GPIO 支持基础的数字 I/O，部分引脚还支持模拟输入（ADC），或可配置为 I2C、SPI、UART 等通信线路。
 
-### Pin Numbering
+### 引脚编号
 
-Each GPIO pin can be referenced in two ways: by its GPIO number (used in software) and by its physical pin location on the board. When writing code, you will use the GPIO number (like GPIO0). When connecting wires, you need to know which GPIO is connected to which physical pin.
+每个 GPIO 引脚有两种标识方式：软件中使用的 GPIO 编号和开发板上的物理引脚位置。编写代码时使用 GPIO 编号（例如 GPIO0）；实际连线时需确认该编号对应的物理针脚。
 
-> GPIO25 is special, it is connected to the onboard LED and can be controlled directly in code without any external wiring.
+> GPIO25 比较特殊，它连接到板载 LED，可以直接在代码中控制，而无需外接布线。
 
-For example, when your code references GPIO0, you'll connect your wire to physical pin 1 on the board. Similarly, GPIO2 connects to physical pin 4.
+例如，当代码中引用 GPIO0 时，在硬件上应将导线连接到物理引脚 1；GPIO2 对应物理引脚 4。
 
-## ADC Pins
+## ADC 引脚
 
-Most pins on the Raspberry Pi Pico 2 work with simple on/off signals; perfect for things like LEDs or buttons. But what if you want to measure how bright a room is to automatically turn on lights? Or monitor soil moisture to water plants? Or read how far someone turned a volume knob? These tasks need pins that can sense gradual changes, not just on/off states.
+Pico 2 上的大多数引脚只能处理简单的开/关信号，适合控制 LED 或读取按钮。但如果你想测量房间亮度以自动点亮灯、监测土壤湿度或读取旋钮转动角度，这些任务需要能够感知连续变化的信号，而非仅有高低电平。
 
-Most of the pins on the Raspberry Pi Pico 2 are digital - they can only read or send values like ON (high) or OFF (low). But some devices, like light sensors or temperature sensors, produce signals that change gradually. To understand these kinds of signals, we need special pins called ADC pins.
+为此，需要使用 ADC（模数转换器）引脚。**ADC**（Analog-to-Digital Converter）会将模拟电压转换为程序可读的数字值。例如 0V 对应 0，3.3V 对应 4095（12 位分辨率的最大值）。本书后文会详细介绍 ADC 的使用。
 
-**ADC** stands for **Analog-to-Digital Converter**. It takes a voltage and turns it into a number your program can understand. For example, a voltage of 0V might become 0, and 3.3V might become 4095 (the highest number the ADC can produce, since it uses 12-bit resolution). We will take a closer look at the ADC later in this book.
+Pico 2 有三个支持 ADC 的引脚，分别是 GPIO26、GPIO27 和 GPIO28，对应 ADC0、ADC1、ADC2。这些引脚可用于读取光敏、电阻式传感器等模拟信号。
 
-The Raspberry Pi Pico 2 has three ADC-capable pins. These are GPIO26, GPIO27, and GPIO28, which correspond to ADC0, ADC1, and ADC2 respectively. You can use these pins to read analog signals from sensors such as light sensors, temperature sensors.
+此外还有两个与模拟输入相关的特殊引脚：
 
-There are also two special pins that support analog readings:
+- **ADC_VREF** 是 ADC 的参考电压。默认连接到 3.3V，意味着 ADC 会把 0V 到 3.3V 映射到数字范围内；你也可以输入其它参考电压（例如 1.25V）以在特定电压范围内获得更高分辨率。
 
-- **ADC_VREF** is the reference voltage for the ADC. By default, it's connected to 3.3V, meaning the ADC will convert anything between 0V and 3.3V into a number. But you can supply a different voltage here (like 1.25V) if you want more precise measurements in a smaller range.
-
-- **AGND** is the analog ground, used to provide a clean ground for analog signals. This helps reduce noise and makes your analog readings more accurate. If you're using an analog sensor, it's a good idea to connect its ground to AGND instead of a regular GND pin.
+- **AGND** 是模拟地，用于为模拟信号提供更干净的接地参考，有助于降低噪声并提高测量精度。使用模拟传感器时，建议将其地连接到 AGND 而不是普通 GND。
  
-## I2C Pins
+## I2C 引脚
 
-The Raspberry Pi Pico 2 supports I2C, a communication protocol used to connect multiple devices using just two wires. It is commonly used with sensors, displays, and other peripherals.
+Pico 2 支持 I2C，总线仅需两根线即可连接多个设备，常用于传感器、显示屏等外设。
 
-I2C uses two signals: **SDA** (data line) and **SCL** (clock line). These two lines are shared by all connected devices. Each device on the bus has a unique address, so the Pico 2 can talk to many devices over the same pair of wires.
+I2C 使用两条信号线：**SDA**（数据）和 **SCL**（时钟）。所有设备共享这两条线，每个设备有唯一地址，Pico 2 可通过同一对线与多个设备通信。
 
-The Raspberry Pi Pico 2 has two I2C controllers: I2C0 and I2C1. Each controller can be mapped to multiple GPIO pins, giving you flexibility depending on your circuit needs.
+Pico 2 提供两个 I2C 控制器：I2C0 与 I2C1。每个控制器可以映射到多组 GPIO，引脚选择更灵活。
 
-- **I2C0** can use these GPIOs:
-  - SDA (data): GPIO0, GPIO4, GPIO8, GPIO12, GPIO16, or GPIO20
-  - SCL (clock): GPIO1, GPIO5, GPIO9, GPIO13, GPIO17, or GPIO21
+- **I2C0** 可使用如下 GPIO：
+  - SDA（数据）：GPIO0、GPIO4、GPIO8、GPIO12、GPIO16 或 GPIO20
+  - SCL（时钟）：GPIO1、GPIO5、GPIO9、GPIO13、GPIO17 或 GPIO21
 
-- **I2C1** can use these GPIOs:
-  - SDA (data): GPIO2, GPIO6, GPIO10, GPIO14, GPIO18, or GPIO26
-  - SCL (clock): GPIO3, GPIO7, GPIO11, GPIO15, GPIO19, or GPIO27
+- **I2C1** 可使用如下 GPIO：
+  - SDA（数据）：GPIO2、GPIO6、GPIO10、GPIO14、GPIO18 或 GPIO26
+  - SCL（时钟）：GPIO3、GPIO7、GPIO11、GPIO15、GPIO19 或 GPIO27
 
-You can choose any matching SDA and SCL pair from the same controller (I2C0 or I2C1).
+需从同一控制器中选择匹配的 SDA/SCL 对。
 
-## SPI Pins
+## SPI 引脚
 
-SPI (Serial Peripheral Interface) is another communication protocol used to connect devices like displays, SD cards, and sensors. Unlike I2C, SPI uses more wires but offers faster communication. It works with one controller (like the Pico 2) and one or more devices.
+SPI（串行外设接口）是另一种常用通信协议，适合连接显示屏、SD 卡和部分传感器。与 I2C 相比，SPI 使用更多线但速度更快，通常由一个控制器与一个或多个设备通信。
 
-SPI uses four main signals:
+SPI 使用四条主要信号：
 
-- **SCK** (Serial Clock): Controls the timing of data transfer.
-- **MOSI** (Master Out Slave In): Data sent from the controller to the device.
-- **MISO** (Master In Slave Out): Data sent from the device to the controller.
-- **CS/SS** (Chip Select or Slave Select): Used by the controller to select which device to talk to.
+- **SCK**（时钟）：控制数据传输节奏；
+- **MOSI**（主出从入）：控制器到设备的数据；
+- **MISO**（主入从出）：设备返回给控制器的数据；
+- **CS/SS**（片选）：由控制器指定要通信的目标设备。
 
-On Pico 2 pinout diagrams, MOSI is labeled as **Tx**, MISO as **Rx**, and CS as **Csn**.
+在 Pico 2 的引脚图中，MOSI 标记为 **Tx**，MISO 标记为 **Rx**，CS 标记为 **Csn**。
 
-The Raspberry Pi Pico 2 has two SPI controllers: SPI0 and SPI1. Each can be connected to multiple GPIO pins, so you can choose whichever set fits your circuit layout.
+Pico 2 提供 SPI0 与 SPI1 两个控制器，可映射到多组 GPIO：
 
-- **SPI0** can use:
-  - SCK: GPIO2, GPIO6, GPIO10, GPIO14, GPIO18
-  - MOSI: GPIO3, GPIO7, GPIO11, GPIO15, GPIO19
-  - MISO: GPIO0, GPIO4, GPIO8, GPIO12, GPIO16
+- **SPI0** 可使用：
+  - SCK：GPIO2、GPIO6、GPIO10、GPIO14、GPIO18
+  - MOSI：GPIO3、GPIO7、GPIO11、GPIO15、GPIO19
+  - MISO：GPIO0、GPIO4、GPIO8、GPIO12、GPIO16
 
-- **SPI1** can use:
-  - SCK: GPIO14, GPIO18
-  - MOSI: GPIO15, GPIO19
-  - MISO: GPIO8, GPIO12, GPIO16
+- **SPI1** 可使用：
+  - SCK：GPIO14、GPIO18
+  - MOSI：GPIO15、GPIO19
+  - MISO：GPIO8、GPIO12、GPIO16
 
-You can choose a group of compatible pins from the same controller depending on your circuit layout. The CS (chip select) pin is not fixed-you can use any free GPIO for that purpose. We will explore how to configure SPI and connect devices in upcoming chapters.
+可根据电路布局从同一控制器中选择兼容的一组引脚。CS（片选）不固定，可以使用任意空闲 GPIO。稍后章节会介绍如何配置 SPI 并连接外设。
 
-## UART Pins
+## UART 引脚
 
-UART (Universal Asynchronous Receiver/Transmitter) is one of the simplest ways for two devices to talk to each other. It uses just two main wires:
+UART（通用异步收发传输器）是最简单的串行通信方式之一，仅需两条主线：
 
-- **TX** (Transmit): Sends data out.
-- **RX** (Receive): Receives data in.
+- **TX**（发送）：输出数据；
+- **RX**（接收）：输入数据；
 
-UART is often used to connect to serial devices like GPS modules, Bluetooth adapters, or even to your computer for debugging messages.
+UART 常用于连接 GPS 模块、蓝牙适配器或与电脑通信以进行调试。
 
-The Raspberry Pi Pico 2 has two UART controllers: **UART0** and **UART1**. Each one can be mapped to several different GPIO pins, giving you flexibility when wiring your circuit.
+Pico 2 提供两个 UART 控制器：**UART0** 与 **UART1**。每个控制器都能映射到多组 GPIO，布线更灵活。
 
-- **UART0** can use:
-  - TX: GPIO0, GPIO12, GPIO16
-  - RX: GPIO1, GPIO13, GPIO17
+- **UART0** 可使用：
+  - TX：GPIO0、GPIO12、GPIO16
+  - RX：GPIO1、GPIO13、GPIO17
 
-- **UART1** can use:
-  - TX: GPIO4, GPIO8
-  - RX: GPIO5, GPIO9
+- **UART1** 可使用：
+  - TX：GPIO4、GPIO8
+  - RX：GPIO5、GPIO9
 
-You need to use a matching TX and RX pin from the same UART controller. For example, you could use UART0 with TX on GPIO0 and RX on GPIO1, or UART1 with TX on GPIO8 and RX on GPIO9.
+需成对使用同一 UART 控制器的 TX 与 RX。例如，可选择 UART0 的 GPIO0（TX）和 GPIO1（RX），或 UART1 的 GPIO8（TX）和 GPIO9（RX）。
 
-## SWD Debugging Pins
+## SWD 调试引脚
 
-The Raspberry Pi Pico 2 provides a dedicated 3-pin debug header for SWD (Serial Wire Debug), which is the standard ARM debugging interface. SWD allows you to flash firmware, inspect registers, set breakpoints, and perform real-time debugging.
+Pico 2 提供专用的 3 针 SWD（Serial Wire Debug）调试接口，这是 ARM 标准的调试方式，能用于刷写固件、查看寄存器、设置断点和实时调试。
 
 ![Raspberry Pi Pico 2 SWD Pins](./images/raspberry-pi-pico2-rp2350-swd-pins.png)
 
-This interface consists of the following signals:
-- **SWDIO** – Serial data line
-- **SWCLK** – Serial clock line
-- **GND** – Ground reference
+该接口包含：
+- **SWDIO**：串行数据线
+- **SWCLK**：串行时钟线
+- **GND**：地参考
 
-These pins are not shared with general-purpose GPIO and are located on a separate debug header at the bottom edge of the board. You will typically use an external debug probe like the Raspberry Pi Debug Probe, CMSIS-DAP adapter, or other compatible tools (e.g., OpenOCD, probe-rs) to connect to these pins.
+这些引脚不与 GPIO 复用，位于板底独立的调试排针上。通常需要借助 Raspberry Pi Debug Probe、CMSIS-DAP 适配器或其它兼容工具（如 OpenOCD、probe-rs）连接这些引脚。
 
-## Onboard Temperature Sensor
+## 板载温度传感器
 
-The Raspberry Pi Pico 2 includes a built-in temperature sensor that is connected internally to **ADC4**. This means you can read the chip's temperature using the ADC, just like you would with an external analog sensor.
+Pico 2 内置一个温度传感器并内部连接到 **ADC4**。你可以像读取外部模拟传感器一样，通过 ADC 获取芯片温度。
 
-This sensor measures the temperature of the RP2350 chip itself. It does not reflect the room temperature accurately, especially if the chip is under load and heating up.
+该传感器测量的是 RP2350 芯片本身的温度，在芯片负载较高时可能高于室温，不能准确反映环境温度。
 
-## Control Pins
+## 控制引脚
 
-These pins control the board's power behavior and can be used to reset or shut down the chip.
+这些引脚用于控制开发板的电源行为，可用于复位或关闭芯片。
 
-- **3V3(EN)** is the enable pin for the onboard 3.3V regulator. Pulling this pin low will disable the 3.3V power rail and effectively turn off the RP2350.
+- **3V3(EN)** 是板载 3.3V 稳压器的使能引脚，将其拉低会关闭 3.3V 电源轨，从而使 RP2350 关闭。
 
-- **RUN** is the reset pin for the RP2350. It has an internal pull-up resistor and stays high by default. Pulling it low will reset the microcontroller. This is helpful if you want to add a physical reset button or trigger a reset from another device.
+- **RUN** 是 RP2350 的复位引脚，内部有上拉电阻，默认为高电平，拉低即复位芯片。可用于连接物理复位按钮或由其它设备触发复位。
