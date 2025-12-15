@@ -1,14 +1,14 @@
 [book]
-title = "Pico Pico - Embedded Programming with Rust"
+title = "《Pico Pico - Embedded Programming with Rust》中文版"
 authors = ["ImplFerris"]
-language = "en"
+language = "zh"
 src = "src"
 
 [output.html]
-git-repository-url = "https://github.com/ImplFerris/pico-pico"
+git-repository-url = "https://github.com/Zhruoshui/pico-pico-zh"
 cname = "pico.implrust.com"
 preferred-dark-theme = "ayu"
-default-theme = "light"
+default-theme = "rust"
 mathjax-support = true
 
 additional-css = ["theme/css/custom.css"]

@@ -1,33 +1,33 @@
-# Real-Time Transfer (RTT)
+# 实时传输（Real-Time Transfer, RTT）
 
-When developing embedded systems, you need a way to see what's happening inside your program. On a normal computer, you would use println! to print messages to the terminal. But on a microcontroller, there's no screen or terminal attached. Real-Time Transfer (RTT) solves this problem by letting you print debug messages and logs from your microcontroller to your computer.
+在开发嵌入式系统时，你需要一种方式来观察程序内部的运行情况。在普通计算机上，你可以使用 `println!` 将消息打印到终端。但在微控制器上，并没有连接屏幕或终端。实时传输（Real-Time Transfer, RTT）通过允许你将调试信息和日志从微控制器发送到电脑，解决了这一问题。
 
-## What is RTT?
+## 什么是 RTT？
 
-RTT is a communication method that lets your microcontroller send messages to your computer through the debug probe you're already using to flash your programs. 
+RTT 是一种通信方法，可让你的微控制器通过已用于烧录程序的调试探针（debug probe）向电脑发送消息。
 
-When you connect the Raspberry Pi Debug Probe to Pico, you're creating a connection that can do two things:
+当你将 Raspberry Pi 调试探针连接到 Pico 时，就建立了一个具备以下两种功能的连接：
 
-- Flash new programs onto the chip
-- Read and write the chip's memory
+- 向芯片烧录新程序  
+- 读写芯片内存  
 
-RTT uses this memory access capability. It creates special memory buffers on your microcontroller, and the debug probe reads these buffers to display messages on your computer. This happens in the background while your program runs normally.
+RTT 利用了这种内存访问能力。它在微控制器上创建特殊的内存缓冲区，调试探针则读取这些缓冲区，并将消息显示在你的电脑上。这一切都在后台进行，不会影响程序的正常运行。
 
-## Using Defmt for Logging
+## 使用 Defmt 进行日志记录
 
-[Defmt](https://github.com/knurling-rs/defmt) (short for "deferred formatting") is a logging framework designed specifically for resource-constrained devices like microcontrollers.  In your Rust embedded projects, you'll use defmt to print messages and debug your programs.
+[Defmt](https://github.com/knurling-rs/defmt)（“deferred formatting”，即“延迟格式化”的缩写）是一个专为资源受限设备（如微控制器）设计的日志框架。在你的 Rust 嵌入式项目中，你将使用 defmt 来打印消息并调试程序。
 
-Defmt achieves high performance using deferred formatting and string compression. Deferred formatting means that formatting is not done on the machine that's logging data but on a second machine. 
+Defmt 通过延迟格式化和字符串压缩实现高性能。所谓延迟格式化，是指格式化操作并非在记录日志的设备上完成，而是在另一台设备（如你的电脑）上进行。
 
-Your Pico sends small codes instead of full text messages. Your computer receives these codes and turns them into normal text. This keeps your firmware small and avoids slow string formatting on the microcontroller.
+你的 Pico 发送的是小型代码，而非完整的文本消息。你的电脑接收这些代码并将其还原为可读的文本。这种方式使固件体积更小，并避免了在微控制器上执行缓慢的字符串格式化操作。
 
-You can add the defmt crate in your project:
+你可以在项目中添加 defmt 依赖：
 
 ```toml
 defmt = "1.0.1"
 ```
 
-Then use it like this:
+然后像这样使用它：
 
 ```rust
 use defmt::{info, warn, error};
@@ -40,44 +40,44 @@ error!("Something went wrong!");
 
 ### Defmt RTT
 
-By itself, defmt doesn't know how to send messages from your Pico to your computer. It needs a transport layer. That's where defmt-rtt comes in.
+Defmt 本身并不知道如何将消息从 Pico 发送到电脑，它需要一个传输层。这就是 `defmt-rtt` 的作用所在。
 
-The defmt-rtt crate connects defmt to RTT, so your log messages get transmitted through the debug probe to your computer.
+`defmt-rtt` crate 将 defmt 与 RTT 连接起来，使你的日志消息能通过调试探针传输到电脑。
 
-You can add the defmt-rtt crate in your project:
+你可以在项目中添加 `defmt-rtt` 依赖：
 
 ```toml
 defmt-rtt = "1.0"
 ```
 
-> Note: To see RTT and defmt logs, you need to run your program using probe-rs tools like the `cargo embed` command. These tools automatically open an RTT session and show the logs in your terminal
+> 注意：要查看 RTT 和 defmt 日志，你需要使用 `probe-rs` 工具（例如 `cargo embed` 命令）运行程序。这些工具会自动开启 RTT 会话，并在终端中显示日志。
 
-Then include it in your code:
+然后在代码中引入它：
 
 ```rust
 use defmt_rtt as _;
 ```
 
-The line sets up the connection between defmt and RTT. You don't call any functions from it directly, but it needs to be imported to make it work.
+这行代码建立了 defmt 与 RTT 之间的连接。你无需直接调用其中的任何函数，但必须导入该 crate 才能使其生效。
 
-### Panic Messages with Panic-Probe
+### 使用 Panic-Probe 显示 Panic 信息
 
-When your program crashes (panics), you want to see what went wrong. The panic-probe crate makes panic messages appear through defmt and RTT.
+当程序崩溃（panic）时，你希望看到具体出错的原因。`panic-probe` crate 可以让 panic 信息通过 defmt 和 RTT 显示出来。
 
-You can add the panic-probe crate in your project:
+你可以在项目中添加 `panic-probe` 依赖：
 
 ```toml
-# The print-defmt feature - tells panic-probe to use defmt for output.
+# print-defmt 特性：告诉 panic-probe 使用 defmt 输出信息。
 panic-probe = { version = "1.0", features = ["print-defmt"] }
 ```
 
-Then include it in your code:
+然后在代码中引入它：
 
 ```rust
 use panic_probe as _;
 ```
 
-You can manually trigger a panic to see how panic messages work. Try adding this to your code:
+你可以手动触发一次 panic 来测试 panic 信息的显示效果。尝试在代码中加入以下内容：
 
 ```rust
 panic!("something went wrong");
