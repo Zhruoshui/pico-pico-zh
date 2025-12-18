@@ -1,5 +1,6 @@
 # Summary
 
+- [写在一开始](./intro/preface.md)
 - [介绍](./index.md)
     - [引脚](./pico2-pinout.md)
     - [额外的硬件](./additional-hardware.md)
@@ -11,7 +12,7 @@
     - [项目模板](./cargo-generate.md)
     - [跑起来](./running.md)
     - [帮助 & 故障排除](./help.md)
-- [调试探针](./debugging/pico-debug-probe.md)
+- [调试器](./debugging/pico-debug-probe.md)
     - [RTT](./debugging/rtt.md)
 - [使用外部 LED](./led/external-led.md)
     - [面包板](./core-concepts/basics/breadboard.md)

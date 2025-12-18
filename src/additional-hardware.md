@@ -16,9 +16,9 @@
 
 ## 可选硬件：Debug Probe
 
-Raspberry Pi Debug Probe 让为 Pico 2 刷写固件变得容易得多。如果没有它，每次想上传新固件时都必须按下 BOOTSEL 按钮。该探针还提供完善的调试支持，非常有用。
+Raspberry Pi Debug Probe 让为 Pico 2 刷写固件变得容易得多。如果没有它，每次想上传新固件时都必须按下 BOOTSEL 按钮。该调试器还提供完善的调试支持，非常有用。
 
-该工具是可选的。你可以在没有它的情况下完成整本书（与 debug probe 相关的部分除外）。我最初使用 Pico 时没有探针，后来才购买了它。
+该工具是可选的。你可以在没有它的情况下完成整本书（与 debug probe 相关的部分除外）。我最初使用 Pico 时没有调试器，后来才购买了它。
 
 <div class="image-with-caption" style="text-align:center;">
     <img src="./images/Raspberry Pi Pico Debug Probe Hardware.jpg" alt="Raspberry Pi Debug Probe 与 Pico 相连" style="width:400px; height:auto; display:block; margin:auto;"/>

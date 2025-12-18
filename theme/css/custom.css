@@ -434,3 +434,42 @@ sup {
     display: inline-block;
     transform: skew(10deg);
 }
+
+/* 译者注样式 / Translator Note Style */
+.translator-note {
+    background: rgba(52, 152, 219, 0.08);
+    border-left: 5px solid #3498db;
+    border-radius: 6px;
+    padding: 15px 20px;
+    margin: 20px 0;
+    position: relative;
+}
+
+.translator-note::before {
+    content: "📝 译者注：";
+    display: block;
+    font-weight: bold;
+    color: #2980b9;
+    margin-bottom: 8px;
+    font-size: 0.95em;
+    letter-spacing: 1px;
+}
+
+/* 允许内部 Markdown 元素正常显示 */
+.translator-note > *:first-child {
+    margin-top: 0;
+}
+
+.translator-note > *:last-child {
+    margin-bottom: 0;
+}
+
+/* 适配深色模式 */
+.ayu .translator-note, .tomorrow-night .translator-note {
+    background: rgba(52, 152, 219, 0.15);
+    border-left-color: #5dade2;
+}
+
+.ayu .translator-note::before, .tomorrow-night .translator-note::before {
+    color: #5dade2;
+}

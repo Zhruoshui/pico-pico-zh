@@ -85,7 +85,7 @@ rustup target add riscv32imac-unknown-none-elf
 
 ## probe-rs —— 烧录与调试工具
 
-`probe-rs` 是一套现代的、原生 Rust 的嵌入式烧录与调试工具链，它同时支持 ARM 与 RISC-V 平台，并可以直接与硬件调试探针配合使用。对于使用 Debug Probe 的 Pico 2，`probe-rs` 是进行烧录和调试的常用工具。
+`probe-rs` 是一套现代的、原生 Rust 的嵌入式烧录与调试工具链，它同时支持 ARM 与 RISC-V 平台，并可以直接与硬件调试器配合使用。对于使用 Debug Probe 的 Pico 2，`probe-rs` 是进行烧录和调试的常用工具。
 
 使用官方安装脚本安装 probe-rs：
 
@@ -95,7 +95,7 @@ curl -LsSf https://github.com/probe-rs/probe-rs/releases/latest/download/probe-r
 
 有关最新安装说明，请参考 [probe-rs 官方文档](https://probe.rs/)。
 
-默认情况下，Linux 上的调试探针只能由 root 访问。为了避免每次都使用 sudo，建议安装相应的 udev 规则，使普通用户也能访问探针。请按照[此处](https://probe.rs/docs/getting-started/probe-setup/)的步骤进行配置。
+默认情况下，Linux 上的调试器只能由 root 访问。为了避免每次都使用 sudo，建议安装相应的 udev 规则，使普通用户也能访问调试器。请按照[此处](https://probe.rs/docs/getting-started/probe-setup/)的步骤进行配置。
 
 **快速摘要：**
 1. 从 probe-rs 仓库下载 udev 规则文件（[69-probe-rs.rules](https://probe.rs/files/69-probe-rs.rules)）
