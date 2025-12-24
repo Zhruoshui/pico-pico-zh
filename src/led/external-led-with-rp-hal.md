@@ -1,31 +1,31 @@
-# Blinky Example using rp-hal
+# 使用 rp-hal 的闪烁示例
 
-In the previous section, we used Embassy. We keep the same circuit and wiring. For this example, we switch to rp-hal to show how both approaches look. You can choose Embassy if you want async support, or rp-hal if you prefer the blocking style. In this book, we will mainly use Embassy.
+在上一节中，我们使用了 Embassy。我们保持相同的电路和接线。对于这个示例，我们切换到 rp-hal 以展示这两种方法的样子。如果你想要异步支持，可以选择 Embassy；如果你更喜欢阻塞风格，可以选择 rp-hal。在本书中，我们将主要使用 Embassy。
 
-We will create a new project again with cargo-generate and the same template.
+我们将再次使用 cargo-generate 和相同的模板创建一个新项目。
 
-In your terminal, type:
+在你的终端中，输入：
 
 ```sh
 cargo generate --git https://github.com/ImplFerris/pico2-template.git --tag v0.3.1
 ```
 
-When it asks you to select HAL, choose "rp-hal" this time.
+当它要求你选择硬件抽象层（HAL）时，这次选择 "rp-hal"。
 
-## Imports
+## 导入
 
-The template already includes most imports. For this example, we need to add the OutputPin trait from embedded-hal:
+模板已经包含了大部分导入。对于这个示例，我们需要从 embedded-hal 中添加 OutputPin 特性（trait）：
 
 ```rust
-// Embedded HAL trait for the Output Pin
+// 用于输出引脚的嵌入式 HAL 特性
 use embedded_hal::digital::OutputPin;
 ```
 
-This trait provides the set_high() and set_low() methods we'll use to control the LED.
+这个特性提供了我们将用来控制 LED 灯（LED）的 set_high() 和 set_low() 方法。
 
-## Main Logic
+## 主要逻辑
 
-If you compare this with the Embassy version, there's not much difference in how the LED is toggled. The main difference is in how the delay works. Embassy uses async and await, which lets the program pause without blocking and allows other tasks to run in the background. rp-hal uses a blocking delay, which stops the program until the time has passed.
+如果你将此与 Embassy 版本进行比较，LED 切换的方式没有太大区别。主要区别在于延迟的工作方式。Embassy 使用 async 和 await，这允许程序在不阻塞的情况下暂停，并允许其他任务在后台运行。rp-hal 使用阻塞延迟，这会停止程序直到时间过去。
 
 ```rust
 let mut led_pin = pins.gpio13.into_push_pull_output();
@@ -39,7 +39,7 @@ loop {
 }
 ```
 
-## Full code
+## 完整代码
 
 ```rust
 #![no_std]
@@ -49,33 +49,33 @@ use embedded_hal::delay::DelayNs;
 use hal::block::ImageDef;
 use rp235x_hal as hal;
 
-//Panic Handler
+// 恐慌处理程序（Panic Handler）
 use panic_probe as _;
-// Defmt Logging
+// Defmt 日志记录
 use defmt_rtt as _;
 
-// Embedded HAL trait for the Output Pin
+// 用于输出引脚的嵌入式 HAL 特性
 use embedded_hal::digital::OutputPin;
 
-/// Tell the Boot ROM about our application
+/// 告知引导 ROM（Boot ROM）关于我们的应用程序
 #[unsafe(link_section = ".start_block")]
 #[used]
 pub static IMAGE_DEF: ImageDef = hal::block::ImageDef::secure_exe();
-/// External high-speed crystal on the Raspberry Pi Pico 2 board is 12 MHz.
-/// Adjust if your board has a different frequency
+/// Raspberry Pi Pico 2 开发板上的外部高速晶振为 12 MHz。
+/// 如果你的开发板频率不同，请进行调整
 const XTAL_FREQ_HZ: u32 = 12_000_000u32;
 
 #[hal::entry]
 fn main() -> ! {
-    // Grab our singleton objects
+    // 获取我们的单例对象
     let mut pac = hal::pac::Peripherals::take().unwrap();
 
-    // Set up the watchdog driver - needed by the clock setup code
+    // 设置看门狗（watchdog）驱动程序 - 时钟设置代码需要它
     let mut watchdog = hal::Watchdog::new(pac.WATCHDOG);
 
-    // Configure the clocks
+    // 配置时钟
     //
-    // The default is to generate a 125 MHz system clock
+    // 默认是生成 125 MHz 的系统时钟
     let clocks = hal::clocks::init_clocks_and_plls(
         XTAL_FREQ_HZ,
         pac.XOSC,
@@ -88,10 +88,10 @@ fn main() -> ! {
     .ok()
     .unwrap();
 
-    // The single-cycle I/O block controls our GPIO pins
+    // 单周期 I/O 块控制我们的通用输入输出（GPIO）引脚
     let sio = hal::Sio::new(pac.SIO);
 
-    // Set the pins up according to their function on this particular board
+    // 根据它们在此特定开发板上的功能设置引脚
     let pins = hal::gpio::Pins::new(
         pac.IO_BANK0,
         pac.PADS_BANK0,
@@ -112,8 +112,8 @@ fn main() -> ! {
     }
 }
 
-// Program metadata for `picotool info`.
-// This isn't needed, but it's recomended to have these minimal entries.
+// 用于 `picotool info` 的程序元数据。
+// 这不是必需的，但建议保留这些最基本的条目。
 #[unsafe(link_section = ".bi_entries")]
 #[used]
 pub static PICOTOOL_ENTRIES: [hal::binary_info::EntryAddr; 5] = [
@@ -125,9 +125,9 @@ pub static PICOTOOL_ENTRIES: [hal::binary_info::EntryAddr; 5] = [
 ];
 ```
 
-## Clone the existing project
+## 克隆现有项目
 
-You can clone the project I created and navigate to the `external-led` folder:
+你可以克隆我创建的项目并导航到 `external-led` 文件夹：
 
 ```sh
 git clone https://github.com/ImplFerris/pico2-rp-projects

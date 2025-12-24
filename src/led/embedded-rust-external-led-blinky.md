@@ -1,59 +1,59 @@
 
-# Blink an External LED on the Raspberry Pi Pico with Embedded Rust
+# 使用嵌入式 Rust 在 Raspberry Pi Pico 上闪烁外部 LED
 
-Let's start by creating our project. We'll use cargo-generate and use the template we prepared for this book.
+让我们从创建项目开始。我们将使用 cargo-generate 并使用我们为本书准备的模板。
 
-In your terminal, type:
+在你的终端中，输入：
 
 ```sh
 cargo generate --git https://github.com/ImplFerris/pico2-template.git --tag v0.3.1
 ```
 
-You will be asked a few questions:
+你会被问到几个问题：
 
-1. For the project name, you can give anything. We will use external-led.
+1. 对于项目名称，你可以随意命名。我们将使用 external-led。
 
-2. Next, it asks us to Select HAL. We should choose "Embassy".
+2. 接下来，它会要求我们选择硬件抽象层（HAL）。我们应该选择 "Embassy"。
 
-3. Then, it will ask whether we want to enable defmt logging. This works only if we use a debug probe, so you can choose based on your setup.  Anyway we are not going to write any log in this exercise.
+3. 然后，它会询问我们是否要启用 defmt 日志记录。这仅在我们使用调试探针时有效，因此你可以根据你的设置进行选择。无论如何，在本次练习中我们不会编写任何日志。
 
-## Imports
+## 导入
 
-Most of the required imports are already in the project template. For this exercise, we only need to add the `Output` struct and the `Level` enum from gpio:
+项目模板中已经包含了大部分所需的导入。对于本次练习，我们只需要从 gpio 中添加 `Output` 结构体和 `Level` 枚举：
 
 ```rust
 use embassy_rp::gpio::{Level, Output};
 ```
 
-While writing the main code, your editor will normally suggest missing imports. If something is not suggested or you see an error, check the full code section and add the missing imports from there.
+在编写主代码时，你的编辑器通常会建议缺失的导入。如果没有建议或者你看到了错误，请检查完整代码部分并从那里添加缺失的导入。
 
-## Main Logic
+## 主要逻辑
 
-The code is almost the same as the quick start example. The only change is that we now use GPIO 13 instead of GPIO 25. GPIO 13 is where we connected the LED (through a resistor).
+代码与快速开始示例几乎相同。唯一的区别是我们现在使用 GPIO 13 而不是 GPIO 25。GPIO 13 是我们连接 LED（通过电阻）的地方。
 
-Let's add these code the main function :
+让我们将这些代码添加到主函数中：
 
 ```rust
 let mut led = Output::new(p.PIN_13, Level::Low);
 
 loop {
-    led.set_high(); // Turn on the LED
+    led.set_high(); // 打开 LED
     Timer::after_millis(500).await;
 
-    led.set_low(); // Turn off the LED
+    led.set_low(); // 关闭 LED
     Timer::after_millis(500).await;
 }
 ```
 
-We are using the Output struct here because we want to send signals from the Pico to the LED. We set up GPIO 13 as an output pin and start it in the low (off) state.
+我们在这里使用 Output 结构体，因为我们想从 Pico 向 LED 发送信号。我们将 GPIO 13 设置为输出引脚，并使其初始状态为低电平（关闭）。
 
-> Note: If you want to read signals from a component (like a button or sensor), you'll need to configure the GPIO pin as Input instead.
+> 注意：如果你想从组件（如按钮或传感器）读取信号，则需要将 GPIO 引脚配置为输入（Input）。
 
-Then we call set_high and set_low on the pin with a delay between them. This switches the pin between high and low, which turns the LED on and off.
+然后我们在引脚上调用 set_high 和 set_low，并在它们之间设置延迟。这会在高电平和低电平之间切换引脚，从而打开和关闭 LED。
 
-## The Full code
+## 完整代码
 
-Here is the complete code for reference:
+这里是完整的代码供参考：
 
 ```rust
 #![no_std]
@@ -65,12 +65,12 @@ use embassy_rp::block::ImageDef;
 use embassy_rp::gpio::{Level, Output};
 use embassy_time::Timer;
 
-//Panic Handler
+// Panic处理程序（Panic Handler）
 use panic_probe as _;
-// Defmt Logging
+// Defmt 日志记录
 use defmt_rtt as _;
 
-/// Tell the Boot ROM about our application
+/// 告知引导 ROM（Boot ROM）关于我们的应用程序
 #[unsafe(link_section = ".start_block")]
 #[used]
 pub static IMAGE_DEF: ImageDef = hal::block::ImageDef::secure_exe();
@@ -82,16 +82,16 @@ async fn main(_spawner: Spawner) {
     let mut led = Output::new(p.PIN_13, Level::Low);
 
     loop {
-        led.set_high(); // Turn on the LED
+        led.set_high(); // 打开 LED
         Timer::after_millis(500).await;
 
-        led.set_low(); // Turn off the LED
+        led.set_low(); // 关闭 LED
         Timer::after_millis(500).await;
     }
 }
 
-// Program metadata for `picotool info`.
-// This isn't needed, but it's recomended to have these minimal entries.
+// 用于 `picotool info` 的程序元数据。
+// 这不是必需的，但建议保留这些最基本的条目。
 #[unsafe(link_section = ".bi_entries")]
 #[used]
 pub static PICOTOOL_ENTRIES: [embassy_rp::binary_info::EntryAddr; 4] = [
@@ -101,18 +101,18 @@ pub static PICOTOOL_ENTRIES: [embassy_rp::binary_info::EntryAddr; 4] = [
     embassy_rp::binary_info::rp_program_build_attribute!(),
 ];
 
-// End of file
+// 文件结束
 ```
 
-## Clone the existing project
+## 克隆现有项目
 
-You can clone the project I created and navigate to the `external-led` folder:
+你可以克隆我创建的项目并导航到 `external-led` 文件夹：
 
 ```sh
 git clone https://github.com/ImplFerris/pico2-embassy-projects
 cd pico2-embassy-projects/external-led
 ```
 
-## How to Run?
+## 如何运行？
 
-You refer the ["Running The Program"](../running.md) section
+你可以参考 [“运行程序”](../running.md) 章节

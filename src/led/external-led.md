@@ -1,26 +1,26 @@
-# Blinking an External LED
+# 闪烁外部 LED
 
-From now on, we'll use more external parts with the Pico. Before we get there, it helps to get comfortable with simple circuits and how to connect components to the Pico's pins. In this chapter, we'll start with something basic: blinking an LED that's connected outside the board.
+从现在开始，我们将与 Pico 一起使用更多外部部件。在此之前，熟悉简单的电路以及如何将组件连接到 Pico 的引脚会有所帮助。在本章中，我们将从一个基本的东西开始：闪烁连接在电路板外的 LED。
 
-## Hardware Requirements
+## 硬件需求
 
 - LED
-- Resistor
-- Jumper wires
+- 电阻
+- 跳线
 
 
-## Components Overview
+## 组件概述
 
-1. LED: An LED (Light Emitting Diode) lights up when current flows through it. The longer leg (anode) connects to positive, and the shorter leg (cathode) connects to ground. We'll connect the anode to GP13 (with a resistor) and the cathode to GND.
+1. LED：发光二极管（LED）在电流通过时会发光。较长的引脚（阳极）连接到正极，较短的引脚（阴极）连接到地线。我们将阳极连接到 GP13（带电阻），阴极连接到 GND。
 
-2. Resistors: A resistor limits the current in a circuit to protect components like LEDs. Its value is measured in Ohms (Ω). We'll use a 330 ohm resistor to safely power the LED.
+2. 电阻：电阻限制电路中的电流，以保护 LED 等组件。其值以欧姆（Ω）计量。我们将使用 330 欧电阻来安全地为 LED 供电。
 
 <table>
   <thead>
     <tr>
-      <th>Pico Pin</th>
-      <th style="width: 250px; margin: 0 auto;">Wire</th>
-      <th>Component</th>
+      <th>Pico 引脚</th>
+      <th style="width: 250px; margin: 0 auto;">导线</th>
+      <th>组件</th>
     </tr>
   </thead>
   <tbody>
@@ -32,17 +32,17 @@ From now on, we'll use more external parts with the Pico. Before we get there, i
           <div class="female-right"></div>
         </div>
       </td>
-      <td>Resistor</td>
+      <td>电阻</td>
     </tr>
     <tr>
-      <td>Resistor</td>
+      <td>电阻</td>
       <td style="text-align: center; vertical-align: middle; padding: 0;">
         <div class="wire orange" style="width: 200px; margin: 0 auto;">
           <div class="female-left"></div>
           <div class="female-right"></div>
         </div>
       </td>
-      <td>Anode (long leg) of LED</td>
+      <td>LED 的阳极（长脚）</td>
     </tr>
     <tr>
       <td>GND</td>
@@ -52,7 +52,7 @@ From now on, we'll use more external parts with the Pico. Before we get there, i
           <div class="female-right"></div>
         </div>
       </td>
-      <td>Cathode (short leg) of LED</td>
+      <td>LED 的阴极（短脚）</td>
     </tr>
   </tbody>
 </table>
@@ -60,17 +60,17 @@ From now on, we'll use more external parts with the Pico. Before we get there, i
 
 <img style="display: block; margin: auto;" alt="pico2" src="../images/pico-external-led.png"/>
 
-You can connect the Pico to the LED using jumper wires directly, or you can place everything on a breadboard. If you're unsure about the hardware setup, you can also refer the [Raspberry pi guide](https://projects.raspberrypi.org/en/projects/introduction-to-the-pico/7).
+你可以使用跳线直接将 Pico 连接到 LED，或者可以在面包板上放置所有东西。如果你对硬件设置不确定，也可以参考 [Raspberry Pi 指南](https://projects.raspberrypi.org/en/projects/introduction-to-the-pico/7)。
 
 <div class="image-with-caption" style="text-align:center; ">
-    <img src="./images/pico-2-rp2350-with-external-led.png" alt="Connecting External LED with Pico 2 (RP2350)" style="max-width:100%; height:auto; display:block; margin:0 auto;"/>
-    <div class="caption" style="font-size:0.9em; color:#555; margin-top:6px;">Circuit with Breadboard</div>
+    <img src="./images/pico-2-rp2350-with-external-led.png" alt="使用 Pico 2（RP2350）连接外部 LED" style="max-width:100%; height:auto; display:block; margin:0 auto;"/>
+    <div class="caption" style="font-size:0.9em; color:#555; margin-top:6px;">面包板电路</div>
 </div>
 
-Note: On the Pico, the pin labels are on the back of the board, which can feel inconvenient when plugging in wires. I often had to check the pinout diagram whenever I wanted to use a GPIO pin. Use the Raspberry Pi logo on the front as a reference point and match it with the [pinout diagram](../pico2-pinout.md) to find the correct pins. Pin positions 2 and 39 are also printed on the front and can serve as additional guides.
+注意：在 Pico 上，引脚标签在电路板的背面，在插入导线时可能会感到不便。我经常需要在想要使用通用输入输出（GPIO）引脚时检查引脚分配图。使用前面的 Raspberry Pi 标志作为参考点，并将其与[引脚分配图](../pico2-pinout.md)相匹配以找到正确的引脚。引脚位置 2 和 39 也印在前面，可以作为额外的参考指南。
 
 
-## LED Blink - Simulation
+## LED 闪烁 - 模拟
 
 
 <style>
@@ -130,7 +130,7 @@ button:active{transform:translateY(1px)}
 input[type=number]{width:110px;padding:8px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:#071023;color:inherit}
 </style>
 
-In this simulation I set the default delay to 5000 milliseconds so the animation is calmer and easier to follow. You can lower it to something like 500 milliseconds to see the LED blink more quickly. When we run the actual code on the Pico, we will use a 500 millisecond delay.
+在这个模拟中，我将默认延迟设置为 5000 毫秒，以便动画更平缓，更容易跟踪。你可以将其降低到 500 毫秒左右，以看到 LED 闪烁得更快。当我们在 Pico 上运行实际代码时，我们将使用 500 毫秒的延迟。
 
 <div class="wrap">
   <div class="top">
@@ -142,20 +142,20 @@ In this simulation I set the default delay to 5000 milliseconds so the animation
       <div class="code" id="code">
         <div class="line" data-index="0"><div class="num">1</div><div class="text">let mut led = Output::new(p.PIN_13, Level::Low);</div></div>
         <div class="line" data-index="1"><div class="num">2</div><div class="text">loop {</div></div>
-        <div class="line" data-index="2"><div class="num">3</div><div class="text">    led.set_high(); // Turn on the LED</div></div>
+        <div class="line" data-index="2"><div class="num">3</div><div class="text">    led.set_high(); // 打开 LED</div></div>
         <div class="line" data-index="3"><div class="num">4</div><div class="text">    Timer::after_millis(<span class="ms-val">5000</span>).await;</div></div>
-        <div class="line" data-index="4"><div class="num">5</div><div class="text">    led.set_low(); // Turn off the LED</div></div>
+        <div class="line" data-index="4"><div class="num">5</div><div class="text">    led.set_low(); // 关闭 LED</div></div>
         <div class="line" data-index="5"><div class="num">6</div><div class="text">    Timer::after_millis(<span class="ms-val">5000</span>).await;</div></div>
         <div class="line" data-index="6"><div class="num">7</div><div class="text">}</div></div>
       <div class="progress-wrap">
         <div class="progress" aria-hidden="true"><div id="bar" class="bar"></div></div>
-        <div class="progress-info"><div id="progress-label">Idle</div><div id="ms-left">0 ms</div></div>
+        <div class="progress-info"><div id="progress-label">空闲</div><div id="ms-left">0 ms</div></div>
       </div>
       <div class="controls">
-        <label>Interval (ms): <input id="interval" type="number" value="5000" min="50" step="50"></label>
-        <button id="restart">Restart</button>
-        <button id="pause">Pause</button>
-        <button id="resume" style="display:none">Resume</button>
+        <label>间隔（毫秒）：<input id="interval" type="number" value="5000" min="50" step="50"></label>
+        <button id="restart">重新开始</button>
+        <button id="pause">暂停</button>
+        <button id="resume" style="display:none">继续</button>
       </div>
     </div>
   </div>
@@ -185,10 +185,10 @@ document.addEventListener("DOMContentLoaded", () => {
   function setLed(on){
     if(on){
       ledEl.classList.add('on');
-      ledState.textContent = 'HIGH';
+      ledState.textContent = '高';
     } else {
       ledEl.classList.remove('on');
-      ledState.textContent = 'LOW';
+      ledState.textContent = '低';
     }
   }
 
@@ -239,9 +239,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
       // line: led.set_high();
       highlight(2);
-      await sleep(300);           // small pause so the highlight is visible
+      await sleep(300);           // 暂停以使高亮可见
       setLed(true);
-      progressLabel.textContent = 'Waiting after set_high()';
+      progressLabel.textContent = 'set_high() 后等待';
 
       // timer line
       highlight(3);
@@ -253,9 +253,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
       // line: led.set_low();
       highlight(4);
-      await sleep(300);           // small pause so the highlight is visible
+      await sleep(300);           // 暂停以使高亮可见
       setLed(false);
-      progressLabel.textContent = 'Waiting after set_low()';
+      progressLabel.textContent = 'set_low() 后等待';
 
       // timer line
       highlight(5);
@@ -265,14 +265,14 @@ document.addEventListener("DOMContentLoaded", () => {
         msLeft.textContent = left + ' ms';
       });
 
-      // end of loop - closing brace briefly
+      // 循环结束 - 右括号短暂显示
       highlight(6);
-      progressLabel.textContent = 'Looping...';
+      progressLabel.textContent = '循环中...';
       await sleep(120);
 
       bar.style.width = '0%';
       msLeft.textContent = '0 ms';
-      progressLabel.textContent = 'Idle';
+      progressLabel.textContent = '空闲';
 
       // respect pause
       while(paused){
@@ -291,13 +291,13 @@ document.addEventListener("DOMContentLoaded", () => {
     paused = true;
     pauseBtn.style.display = 'none';
     resumeBtn.style.display = 'inline-block';
-    progressLabel.textContent = 'Paused';
+    progressLabel.textContent = '已暂停';
   });
   resumeBtn.addEventListener('click', () => {
     paused = false;
     resumeBtn.style.display = 'none';
     pauseBtn.style.display = 'inline-block';
-    progressLabel.textContent = 'Resuming...';
+    progressLabel.textContent = '继续中...';
   });
 
   // update interval on input and reflect in code
