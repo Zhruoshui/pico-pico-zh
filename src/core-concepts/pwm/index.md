@@ -1,32 +1,32 @@
 
-# Pulse Width Modulation (PWM)
+# 脉宽调制（PWM）
 
-In this section, we will explore what is PWM and why we need it.
+在本节中，我们将探索什么是 PWM 以及为什么我们需要它。
 
-## Digital vs Analog
+## 数字与模拟
 
-To understand PWM, we first need to understand what is digital and analog signal.
+为了理解 PWM，我们首先需要理解什么是数字信号和模拟信号。
 
-### Digital Signals
+### 数字信号
 
-A digital signal has only two states: HIGH or LOW. In microcontrollers, HIGH typically means the full voltage (5V or 3.3V), and LOW means 0V. There's nothing in between. Think of it like a light switch that can only be fully ON or fully OFF.
+数字信号只有两种状态：HIGH（高电平）或 LOW（低电平）。在微控制器（MCU）中，HIGH 通常意味着全电压（5V 或 3.3V），而 LOW 意味着 0V。两者之间没有任何值。把它想象成一个电灯开关，只能是完全“开”或完全“关”。
 
 <img style="display: block; margin: auto;" alt="Digital Signals" src="./images/digial-signal.svg"/>
 
-When you use a digital pin on your microcontroller, you can only output these two values. If you write HIGH to a pin, it outputs 3.3V. If you write LOW, it outputs 0V. You cannot tell a digital pin to output 1.5V or 2.7V or any value in between.
+当你使用微控制器上的数字引脚时，你只能输出这两个值。如果你向引脚写入 HIGH，它输出 3.3V。如果你写入 LOW，它输出 0V。你无法告诉数字引脚输出 1.5V 或 2.7V 或任何中间值。
 
-## Analog Signals
+## 模拟信号
 
-An analog signal can have any voltage value within a range. Instead of just ON or OFF, it varies continuously and smoothly. Think of it like a dimmer switch that can set brightness anywhere from completely off to fully bright, with infinite positions in between.
+模拟信号可以在一个范围内具有任何电压值。它不仅仅是“开”或“关”，而是连续且平滑地变化。把它想象成一个调光开关，可以将亮度设置为从完全关闭到完全明亮的任何位置，中间有无限个位置。
 
 <img style="display: block; margin: auto;" alt="Analog Signals" src="./images/analog-signal.svg"/>
 
-For example, an analog signal could be 0V, 0.5V, 1.5V, 2.8V, 3.1V, or any other value within the allowed range. This smooth variation allows you to have precise control over devices.
+例如，模拟信号可以是 0V、0.5V、1.5V、2.8V、3.1V，或允许范围内的任何其他值。这种平滑的变化使你能够精确控制设备。
 
-## The Problem
+## 问题所在
 
-Here's the challenge: most microcontroller pins are digital. They can only output HIGH or LOW. But what if you want to:
+挑战在于：大多数微控制器引脚都是数字的。它们只能输出 HIGH 或 LOW。但如果你想要做到以下几点呢：
 
-Dim an LED to 50% brightness instead of just fully ON or fully OFF (like we did in the quick-start blinking example)? Or Control a servo motor to any position between 0° and 180°? Or Adjust the speed of a fan or control temperature gradually?
+将 LED 灯调暗到 50% 亮度，而不是仅仅完全开启或完全关闭（就像我们在快速开始的闪烁示例中做的那样）？或者控制伺服电机到 0° 到 180° 之间的任何位置？或者调节风扇速度或逐渐控制温度？
 
-You need something that acts like an analog output, but you only have digital pins. This is where PWM comes in.
+你需要某种行为类似于模拟输出的东西，但你只有数字引脚。这就是 PWM 发挥作用的地方。

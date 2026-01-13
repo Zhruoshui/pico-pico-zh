@@ -39,7 +39,7 @@
 
 ### 在线阅读
 访问原版在线文档站：[https://pico.implrust.com/](https://pico.implrust.com/)
-翻译版本文档站：[还在申请域名中]
+翻译版本文档站：[https://rrpbook.aruoshui.fun/intro/preface.html](https://rrpbook.aruoshui.fun/intro/preface.html)
 
 ### 本地构建与预览
 如果你想在本地离线阅读或调试本书，请确保已安装 `mdbook`：
