@@ -47,6 +47,8 @@ jobs:
 
       - name: Deploy via rsync
         run: |
-          rsync -az --delete --info=stats2 \
+          rsync -rz --delete --info=stats2 \
+            --no-perms --no-owner --no-group --omit-dir-times --no-times \
+            --chmod=Du=rwx,Dgo=rx,Fu=rw,Fgo=r \
             -e "ssh -p ${DEPLOY_PORT} -i ~/.ssh/id_ed25519 -o IdentitiesOnly=yes -o StrictHostKeyChecking=yes" \
             ./book/ "${DEPLOY_USER}@${DEPLOY_HOST}:${DEPLOY_PATH}/"
