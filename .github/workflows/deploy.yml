@@ -1,64 +1,32 @@
-name: Build & deploy mdBook to server
+name: Deploy to GitHub Pages
 
 on:
   push:
-    branches: ["main"]
-
+    branches:
+      - main
   workflow_dispatch:
-
-concurrency:
-  group: "deploy-rrpbook"
-  cancel-in-progress: false
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    env:
-      MDBOOK_VERSION: 0.5.1
-      DEPLOY_HOST: rrpbook.aruoshui.fun
-      DEPLOY_USER: git
-      DEPLOY_PORT: "22"
-      DEPLOY_PATH: /www/wwwroot/rrpbook
+    permissions:
+      contents: write
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.ref }}
     steps:
       - uses: actions/checkout@v4
 
       - name: Install mdBook
         uses: peaceiris/actions-mdbook@v2
         with:
-          mdbook-version: ${{ env.MDBOOK_VERSION }}
+          mdbook-version: latest
 
       - name: Build with mdBook
         run: mdbook build
 
-      - name: Setup SSH key
-        shell: bash
-        run: |
-          mkdir -p ~/.ssh
-          chmod 700 ~/.ssh
-          printf '%s' "${{ secrets.DEPLOY_SSH_KEY }}" > ~/.ssh/id_ed25519
-          chmod 600 ~/.ssh/id_ed25519
-
-          if [[ -n "${{ secrets.DEPLOY_KNOWN_HOSTS }}" ]]; then
-            printf '%s\n' "${{ secrets.DEPLOY_KNOWN_HOSTS }}" > ~/.ssh/known_hosts
-          else
-            ssh-keyscan -p "${DEPLOY_PORT}" "${DEPLOY_HOST}" >> ~/.ssh/known_hosts
-          fi
-
-      - name: Deploy via rsync over SSH
-        shell: bash
-        run: |
-          set -euo pipefail
-
-          ssh \
-            -p "${DEPLOY_PORT}" \
-            -i ~/.ssh/id_ed25519 \
-            -o IdentitiesOnly=yes \
-            -o StrictHostKeyChecking=yes \
-            "${DEPLOY_USER}@${DEPLOY_HOST}" \
-            "mkdir -p '${DEPLOY_PATH}'"
-
-          rsync -rz --delete --delete-delay --delay-updates --info=stats2 \
-            --exclude='.user.ini' \
-            --no-perms --no-owner --no-group --omit-dir-times --no-times \
-            -e "ssh -p ${DEPLOY_PORT} -i ~/.ssh/id_ed25519 -o IdentitiesOnly=yes -o StrictHostKeyChecking=yes" \
-            ./book/ "${DEPLOY_USER}@${DEPLOY_HOST}:${DEPLOY_PATH}/"
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        if: ${{ github.ref == 'refs/heads/main' }}
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./book
