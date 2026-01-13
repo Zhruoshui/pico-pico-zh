@@ -44,21 +44,21 @@ jobs:
             ssh-keyscan -p "${DEPLOY_PORT}" "${DEPLOY_HOST}" >> ~/.ssh/known_hosts
           fi
 
-      - name: Deploy via tar over SSH
+      - name: Deploy via rsync over SSH
         shell: bash
         run: |
-          tar -C ./book -czf - . | ssh \
+          set -euo pipefail
+
+          ssh \
             -p "${DEPLOY_PORT}" \
             -i ~/.ssh/id_ed25519 \
             -o IdentitiesOnly=yes \
             -o StrictHostKeyChecking=yes \
             "${DEPLOY_USER}@${DEPLOY_HOST}" \
-            "bash -lc 'set -euo pipefail; \
-              deploy_path=\"${DEPLOY_PATH}\"; \
-              mkdir -p \"${DEPLOY_PATH}\"; \
-              tmp=\$(mktemp -d \"${DEPLOY_PATH}/.deploy_tmp.XXXXXX\"); \
-              tar -xzf - -C \"\$tmp\" --no-same-owner --no-same-permissions; \
-              rsync -r --delete --info=stats2 \
-                --no-perms --no-owner --no-group --omit-dir-times --no-times \
-                \"\$tmp\"/ \"${DEPLOY_PATH}\"/; \
-              rm -rf \"\$tmp\"'"
+            "mkdir -p '${DEPLOY_PATH}'"
+
+          rsync -rz --delete --delete-delay --delay-updates --info=stats2 \
+            --exclude='.user.ini' \
+            --no-perms --no-owner --no-group --omit-dir-times --no-times \
+            -e "ssh -p ${DEPLOY_PORT} -i ~/.ssh/id_ed25519 -o IdentitiesOnly=yes -o StrictHostKeyChecking=yes" \
+            ./book/ "${DEPLOY_USER}@${DEPLOY_HOST}:${DEPLOY_PATH}/"
