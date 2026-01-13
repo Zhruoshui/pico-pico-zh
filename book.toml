@@ -1,0 +1,21 @@
+[book]
+title = "《Pico Pico - Embedded Programming with Rust》中文版"
+authors = ["ImplFerris"]
+language = "zh"
+src = "src"
+
+[output.html]
+git-repository-url = "https://github.com/Zhruoshui/pico-pico-zh"
+cname = "pico.implrust.com"
+preferred-dark-theme = "ayu"
+default-theme = "rust"
+mathjax-support = true
+
+additional-css = ["theme/css/custom.css"]
+
+[output.html.fold]
+enable = true
+level = 1     # the depth to start folding
+
+[output.html.playground]
+editable = true
