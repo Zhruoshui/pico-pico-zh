@@ -23,10 +23,9 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Install mdBook
-        run: |
-          curl --proto '=https' --tlsv1.2 https://sh.rustup.rs -sSf -y | sh
-          rustup update
-          cargo install --version ${MDBOOK_VERSION} mdbook
+        uses: peaceiris/actions-mdbook@v2
+        with:
+          mdbook-version: ${{ env.MDBOOK_VERSION }}
 
       - name: Build with mdBook
         run: mdbook build
@@ -47,7 +46,7 @@ jobs:
 
       - name: Deploy via rsync
         run: |
-          rsync -rz --delete --info=stats2 \
+          rsync -r --whole-file --delete --info=stats2 \
             --no-perms --no-owner --no-group --omit-dir-times --no-times \
             --chmod=Du=rwx,Dgo=rx,Fu=rw,Fgo=r \
             -e "ssh -p ${DEPLOY_PORT} -i ~/.ssh/id_ed25519 -o IdentitiesOnly=yes -o StrictHostKeyChecking=yes" \
