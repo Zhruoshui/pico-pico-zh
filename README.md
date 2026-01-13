@@ -1,43 +1,86 @@
-# Pico Pico - Intro
-> 一本关于如何在 Raspberry Pi Pico 2 上使用 Rust 开发的中文文档
+# 《Pico Pico》中文版 - Rust 嵌入式开发指南
 
-In this book, we use the Raspberry Pi Pico 2 and program it in Rust to explore various exciting projects. You'll work on exercises like dimming an LED, controlling a servo motor, measuring distance with a sonic sensor, displaying the Ferris (🦀) image on an OLED display, using RFID reader, playing songs on a buzzer, turning on an LED when the room light is off, measuring temperature, and much more.
+> 📚 一本关于如何在 Raspberry Pi Pico 2 (RP2350) 上使用 Rust 进行嵌入式开发的中文实战指南。
 
-## Meet the hardware - Pico 2
+本项目是 [Pico Pico](https://github.com/ImplFerris/pico-pico) 的中文翻译与维护版本。在这本书中，我们将探索如何使用 Rust 语言挖掘 Raspberry Pi Pico 2 的潜力。
 
-We will be using the Raspberry Pi Pico 2 (RP2350 chip). It features the new RP2350 chip with dual-core flexibility;offering Arm Cortex-M33 cores and optional RISC-V Hazard3 cores. You can operate it as the standard ARM core or switch to the RISC-V architecture. You find more details from the [official website](https://www.raspberrypi.com/products/raspberry-pi-pico-2/).
+## 🚧 翻译进度
 
-<img style="display: block; margin: auto;" alt="pico2" src="./src/images/pico2.png"/>
+- [x] 写在一开始 / 介绍
+- [x] 调试器
+- [x] 使用外部 LED
+- [x] 从 std 到 no_std
+- [ ] PWM
+- [ ] 调节 LED 亮度
+- [ ] 在 VS Code 中使用 Pico
+- [ ] 按钮 / 分压器
+- [ ] 超声波
+- [ ] I2C
+- [ ] OLED 显示屏
+- [ ] 舵机
+- [ ] 看门狗
+- [ ] 蜂鸣器 (Buzzinga)
+- [ ] LDR 光敏电阻
+- [ ] ADC / 热敏电阻
+- [ ] USB 串口
+- [ ] RFID
+- [ ] SD 卡
+- [ ] LCD 显示屏
+- [ ] 摇杆
+- [ ] 调试 (GDB)
 
-## How to read
+## 📖 内容概览
 
-You can access the MD book here: https://pico.implrust.com/
+通过本书，你将动手完成一系列有趣的实验和项目，包括但不限于：
 
-or you can run locally
+- **基础入门**：搭建 Rust 嵌入式开发环境，理解  与 。
+- **硬件控制**：点亮 LED、读取按键输入、PWM 呼吸灯调节。
+- **传感器与模块**：
+  - 📏 超声波测距
+  - 🌡️ 温度监测
+  - 🎵 蜂鸣器播放音乐
+  - 📟 OLED 显示 Ferris (🦀) 吉祥物
+  - 💳 RFID 读写器
+- **进阶话题**：I2C 通信、Embassy 异步编程框架等。
+
+## 🛠️ 硬件平台：Pico 2
+
+本书主要基于 **Raspberry Pi Pico 2**。它搭载了全新的 RP2350 芯片，具有双核灵活性 —— 提供 Arm Cortex-M33 内核和可选的 RISC-V Hazard3 内核。你可以在 [树莓派官网](https://www.raspberrypi.com/products/raspberry-pi-pico-2/) 了解更多详情。
+
+<img style="display: block; margin: auto;" alt="pico2" src="./src/images/pico2.png" width="80%"/>
+
+## 🚀 如何阅读
+
+### 在线阅读
+访问原版在线文档站：[https://pico.implrust.com/](https://pico.implrust.com/)
+翻译版本文档站：[还在申请域名中]
+
+### 本地构建与预览
+如果你想在本地离线阅读或调试本书，请确保已安装 `mdbook`：
 
 ```sh
+# 安装 mdbook
+cargo install mdbook
+
+# 克隆仓库并启动本地服务
+git clone https://github.com/Zhruoshui/pico-pico-zh
+cd pico-pico-zh
 mdbook serve --open
 ```
 
-## Support this project
+## 🤝 参与贡献
 
-You can support this book by starring this project on [GitHub](https://github.com/ImplFerris/pico-pico) or sharing this book with others 😊
+欢迎提交 Issue 或 Pull Request 来改进翻译质量或补充内容！
 
-## License
+*   **开发规范**：请参考 [Contribution.md](./Contribution.md) 了解项目结构、编写风格及提交规范。
+*   **构建输出**：请勿提交 `book/` 目录下的构建产物。
 
-The Pico Pico book(this project) is distributed under the following licenses:
+## 📄 许可证 (License)
 
-* The code samples and free-standing Cargo projects contained within this book are licensed under the terms of both the [MIT License] and the [Apache License v2.0].
-* The written prose contained within this book is licensed under the terms of the Creative Commons [CC-BY-SA v4.0] license.
+本项目遵循以下开源协议：
 
-[MIT License]: ./LICENSE-MIT
-[Apache License v2.0]: ./LICENSE-APACHE
-[CC-BY-SA v4.0]: ./LICENSE-CC-BY-SA
-[MIT License Hosted]: https://opensource.org/licenses/MIT
-[Apache License v2.0 Hosted]: http://www.apache.org/licenses/LICENSE-2.0
-[CC-BY-SA v4.0 Hosted]: https://creativecommons.org/licenses/by-sa/4.0/legalcode
+*   **代码示例**：同时遵循 [MIT License](./LICENSE-MIT) 和 [Apache License v2.0](./LICENSE-APACHE)。
+*   **文档内容**：遵循 Creative Commons [CC-BY-SA v4.0](./LICENSE-CC-BY-SA) 协议。
 
-
-### Disclaimer:
-
-The experiments and projects shared in this book have worked for me, but results may vary. I'm not responsible for any issues or damage that may occur while you're experimenting. Please proceed with caution and take necessary safety precautions.
+---
+**免责声明**：书中的实验和项目仅供学习参考，请在操作硬件时注意安全，作者不对实验过程中可能造成的硬件损坏负责。
