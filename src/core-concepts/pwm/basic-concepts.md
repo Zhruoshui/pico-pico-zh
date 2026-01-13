@@ -1,5 +1,5 @@
 
-# Pulse Width Modulation (PWM)
+# 脉宽调制（PWM）
 
 <style>
   
@@ -71,73 +71,73 @@
   } 
 </style>
 
-PWM stands for Pulse Width Modulation. It's a technique that uses a digital signal switching rapidly between HIGH and LOW to simulate an analog output.
+PWM 代表脉宽调制（Pulse Width Modulation）。它是一种使用在 HIGH 和 LOW 之间快速切换的数字信号来模拟模拟输出的技术。
 
-Instead of providing a steady voltage like 1.5V as a true analog signal would, PWM quickly toggles between full voltage and 0V. By controlling how long the signal stays HIGH versus LOW, you can control the average power or voltage delivered to the device.
+PWM 不像真正的模拟信号那样提供稳定的电压（如 1.5V），而是在全电压和 0V 之间快速切换。通过控制信号保持在 HIGH 和 LOW 的时间长短，你可以控制输送到设备的平均功率或电压。
 
-### How PWM Works
+### PWM 如何工作
 
-PWM works by sending a square wave signal that switches between HIGH and LOW at a fixed frequency. The key parameter is the "duty cycle", which is the percentage of time the signal is HIGH during one complete cycle.
+PWM 的工作原理是以固定的频率发送在 HIGH 和 LOW 之间切换的方波信号。关键参数是“占空比”，即在一个完整周期内信号处于 HIGH 状态的时间百分比。
 
 <img style="display: block; margin: auto;" alt="LED PWM" src="../images/led-pwm.jpg" />
 
-For example:
-- A 0% duty cycle means the signal is always LOW (0V average). 
-- A 50% duty cycle means the signal is HIGH and LOW for equal amounts of time (1.65V average on a 3.3 system). 
-- A 75% duty cycle means the signal is HIGH for 75% of the time and LOW for 25% of the time. 
-- A 100% duty cycle means the signal is always HIGH (3.3V).
+例如：
+- 0% 占空比意味着信号始终为 LOW（平均 0V）。
+- 50% 占空比意味着信号在 HIGH 和 LOW 的时间相等（3.3V 系统中平均 1.65V）。
+- 75% 占空比意味着信号有 75% 的时间为 HIGH，25% 的时间为 LOW。
+- 100% 占空比意味着信号始终为 HIGH（3.3V）。
 
-The switching happens extremely fast, typically hundreds or thousands of times per second. This is so fast that devices like LEDs and motors respond to the average voltage rather than seeing individual pulses.
+这种切换发生得极快，通常每秒数百或数千次。速度如此之快，以至于 LED 和电机等设备响应的是平均电压，而不是单个脉冲。
 
-## Example Usage: Dimming an LED
+## 示例用法：LED 调光
 
-An LED flashes so quickly that your eyes can't see individual ON and OFF pulses, so you perceive only the average brightness. A low duty cycle makes it look dim, a higher one makes it look brighter, even though the LED is always switching between full voltage and zero.
+LED 闪烁得如此之快，以至于你的眼睛看不到单独的“开”和“关”脉冲，因此你只感知到平均亮度。较低的占空比使其看起来较暗，较高的占空比使其看起来较亮，即使 LED 始终在全电压和零电压之间切换。
 
-## Example Usage: Controlling a Servo Motor
+## 示例用法：控制伺服电机
 
-A servo reads the width of a pulse to decide its angle. It expects a pulse every 20 milliseconds, and the pulse width - about 1ms for 0°, 1.5ms for 90°, and 2ms for 180° - tells the servo where to move.
+伺服电机读取脉冲的宽度来决定其角度。它期望每 20 毫秒有一个脉冲，而脉冲宽度——0° 约为 1ms，90° 约为 1.5ms，180° 约为 2ms——告诉伺服电机移动到哪里。
 
 
-## Period and Frequency
+## 周期和频率
 
-In PWM, period and frequency work together to determine how fast the signal switches between HIGH and LOW states, which directly affects how smooth and effective your control is.
+在 PWM 中，周期和频率协同工作以决定信号在 HIGH 和 LOW 状态之间切换的速度，这直接影响控制的平滑度和有效性。
 
-Period is the total time for one on-off cycle to complete. 
+周期是一个“开-关”循环完成所需的总时间。
 
 <img style="display: block; margin: auto;" alt="Period and Frequency" src="./images/pwm-period-frequency.svg"/>
 
-The frequency is the number of cycles it completes in one second, measured in Hertz (Hz).  Frequency is the inverse of the period.  So, a higher frequency means a shorter period, resulting in faster switching between HIGH and LOW states.
+频率是一秒钟内完成的循环次数，以赫兹（Hz）为单位测量。频率是周期的倒数。因此，频率越高，周期越短，从而导致 HIGH 和 LOW 状态之间的切换越快。
 
 \\[
 \text{Frequency (Hz)} = \\frac{1}{\text{Period (s)}}
 \\]
 
-So if the period is 1 second, then the frequency will be 1HZ.
+因此，如果周期为 1 秒，则频率将为 1Hz。
 
 \\[
 1 \text{Hz} = \\frac{1 \text{ cycle}}{1 \text{ second}} = \\frac{1}{1 \text{ s}}
 \\]
 
-For example, if the period is 20ms(0.02s), the frequency will be 50Hz.
+例如，如果周期为 20ms（0.02s），频率将为 50Hz。
 
 \\[
 \text{Frequency} = \\frac{1}{20 \text{ ms}} = \\frac{1}{0.02 \text{ s}} = 50 \text{ Hz}
 \\]
 
 
-**Calculating Cycle count from Frequency per second**
+**根据每秒频率计算循环计数**
 
-The Formula to calculate cycle count:  
+计算循环计数的公式：
 \\[
 \text{Cycle Count} = \text{Frequency (Hz)} \\times \text{Total Time (seconds)}
 \\]
 
-If a PWM signal has a frequency of 50Hz, it means it completes 50 cycles in one second.
+如果 PWM 信号的频率为 50Hz，这意味着它在一秒钟内完成 50 个循环。
 
 
-## Simulation
+## 仿真
 
-Here is the interactive simulation. Use the sliders to adjust the duty cycle and frequency, and watch how the pulse width and LED brightness change. The upper part of the square wave represents when the signal is high (on). The lower part represents when the signal is low (off). The width of the high portion changes with the duty cycle.
+这是一个交互式仿真。使用滑块调整占空比和频率，并观察脉冲宽度和 LED 亮度如何变化。方波的上半部分代表信号为高电平（开）时。下半部分代表信号为低电平（关）时。高电平部分的宽度随占空比而变化。
 
 <canvas id="pwmCanvas" width="800" height="200"></canvas>
 <div class="led-container">
@@ -157,7 +157,7 @@ Here is the interactive simulation. Use the sliders to adjust the duty cycle and
   <!-- <span id="frequencyValue">x</span> Hz -->
 </div>
 
-If you change the duty cycle from "low to high" and "high to low" in the simulation, you should notice the LED kind of giving a dimming effect.
+如果你在仿真中把占空比从“低调到高”再从“高调到低”，你应该会注意到 LED 呈现出一种调光效果。
 
 
 <script>
