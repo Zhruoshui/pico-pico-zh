@@ -1,0 +1,36 @@
+name: Deploy to GitHub Pages
+
+on:
+  # 当 build 工作流完成，且是主分支的构建成功时触发
+  workflow_run:
+    workflows: ["Build mdBook"]
+    branches: ["main"]
+    types: 
+      - completed
+  
+  # 也可以手动触发
+  workflow_dispatch:
+
+# 设置 GITHUB_TOKEN 的权限，允许部署到 Pages
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# 限制并发部署，避免冲突
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    # 仅当构建工作流成功时才运行部署
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

@@ -1,0 +1,36 @@
+name: Build mdBook
+
+on:
+  push:
+    branches: ["main"]
+  workflow_dispatch:
+
+env:
+  MDBOOK_VERSION: "0.4.43"
+  # MDBOOK_MERMAID_VERSION: "0.12.6" # 如果需要 mermaid 支持，可以取消注释并安装
+  # MDBOOK_LINKCHECK_VERSION: "0.7.7" # 如果需要链接检查，可以取消注释并安装
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install mdBook
+        uses: peaceiris/actions-mdbook@v2
+        with:
+          mdbook-version: ${{ env.MDBOOK_VERSION }}
+          # 如果未来需要 mermaid 等插件，可以在这里继续添加安装步骤，或者参照 gist-rs 手动 curl 下载
+      
+      # 这里预留给未来安装 mermaid 等插件的位置
+      # - name: Install mdBook plugins
+      #   run: |
+      #     ...
+
+      - name: Build
+        run: mdbook build
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./book

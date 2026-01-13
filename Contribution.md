@@ -27,3 +27,17 @@
 - Commit 信息保持简短、描述本次变更范围，如 `i2c: 校正初始化顺序` 或 `翻译：更新 quick-start`，与仓库历史风格一致。
 - PR 描述需包含：变更摘要、影响章节/文件列表、预览截图（若涉及 UI/图片更新）、验证步骤（运行的命令）。
 - 确认无多余构建产物提交（尤其是 `book/`）；引用外部资源或示例时注明来源并符合仓库许可证（MIT/Apache 2.0/CC-BY-SA）。
+
+## 自动化部署 (CI/CD)
+本项目采用 GitHub Actions 进行自动化构建与部署，分为两个独立阶段：
+
+1.  **构建 (Build)** - `.github/workflows/build.yml`
+    - 触发条件：推送到 `main` 分支。
+    - 任务：安装 mdBook 环境，构建电子书，并将 `book/` 目录打包为 Artifact 上传。如需添加插件（如 Mermaid），请在此文件修改。
+
+2.  **发布 (Deploy)** - `.github/workflows/pages.yml`
+    - 触发条件：`Build` 工作流成功完成后自动触发。
+    - 任务：下载构建产物，使用 GitHub 官方推荐的 `actions/deploy-pages` 发布到 GitHub Pages。
+    - 线上地址：[rrpbook.aruoshui.fun](https://rrpbook.aruoshui.fun/)
+
+**提示**：提交代码时请勿包含 `book/` 目录，CI/CD 系统会每次自动重新构建并发布。
