@@ -10,7 +10,7 @@
 - [x] 调试器
 - [x] 使用外部 LED
 - [x] 从 std 到 no_std
-- [ ] PWM
+- [x] PWM
 - [ ] 调节 LED 亮度
 - [ ] 在 VS Code 中使用 Pico
 - [ ] 按钮 / 分压器
@@ -39,6 +39,7 @@
 
 ### 在线阅读
 访问原版在线文档站：[https://pico.implrust.com/](https://pico.implrust.com/)
+
 翻译版本文档站：[https://rrpbook.aruoshui.fun/intro/preface.html](https://rrpbook.aruoshui.fun/intro/preface.html)
 
 ### 本地构建与预览

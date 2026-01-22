@@ -1,52 +1,52 @@
-# PWM Peripheral in RP2350
+# RP2350 中的 PWM 外设
 
-The RP2350 has a PWM peripheral with 12 PWM generators called slices. Each slice contains two output channels (A and B), giving you a total of 24 PWM output channels. For detailed specifications, see page 1076 of the [RP2350 Datasheet](https://datasheets.raspberrypi.com/rp2350/rp2350-datasheet.pdf).
-
-
-Let's have a quick look at some of the key concepts.
-
-## PWM Generator (Slice)
-
-A slice is the hardware block that generates PWM signals. Each of the 12 slices (PWM0–PWM11) is an independent timing unit with its own 16-bit counter, compare registers, control settings, and clock divider. This independence means you can configure each slice with different frequencies and resolutions.
+RP2350 有一个包含 12 个 PWM 生成器（称为“Slice”）的脉宽调制（PWM）外设。每个 Slice 包含两个输出通道（A 和 B），总共提供 24 个 PWM 输出通道。详细规格请参阅 [RP2350 Datasheet](https://datasheets.raspberrypi.com/rp2350/rp2350-datasheet.pdf) 第 1076 页。
 
 
-## Channel
+让我们快速了解一些核心概念。
 
-Each slice contains two output channels: **Channel A** and **Channel B**. Both channels share the same counter, so they run at the same frequency and are synchronized. However, each channel has its own compare register, allowing independent duty cycle control. This lets you generate two related but distinct PWM signals from a single slice.
+## PWM 生成器（Slice）
+
+Slice 是生成 PWM 信号的硬件块。12 个 Slice（PWM0–PWM11）中的每一个都是独立的计时单元，拥有自己的 16 位计数器、比较寄存器、控制设置和时钟分频器。这种独立性意味着你可以为每个 Slice 配置不同的频率和分辨率。
 
 
-## Mapping of PWM channels to GPIO Pins
+## 通道
 
-Each GPIO pin connects to a specific slice and channel. You'll find the complete mapping table on page 1078 of the [RP2350 Datasheet](https://datasheets.raspberrypi.com/rp2350/rp2350-datasheet.pdf). For example, GP25 (the onboard LED pin) maps to PWM slice 4, channel B, labeled as **4B**.
+每个 Slice 包含两个输出通道：**通道 A** 和 **通道 B**。两个通道共享同一个计数器，因此它们运行在相同的频率且完全同步。但是，每个通道都有自己的比较寄存器，允许独立控制占空比。这让你能够从单个 Slice 生成两个相关但不同的 PWM 信号。
+
+
+## PWM 通道到 GPIO 引脚的映射
+
+每个通用输入输出（GPIO）引脚连接到特定的 Slice 和通道。你可以在 [RP2350 Datasheet](https://datasheets.raspberrypi.com/rp2350/rp2350-datasheet.pdf) 第 1078 页找到完整的映射表。例如，GP25（板载 LED 灯引脚）映射到 PWM Slice 4 的通道 B，标记为 **4B**。
 
 <img style="display: block; margin: auto;" alt="pico2" src="../images/gpio-map-pwm-channels.png"/>
 
-Initialize the PWM peripheral and get access to all slices:
+初始化 PWM 外设并获取所有 Slice 的访问权限：
 
 ```rust
 let mut pwm_slices = hal::pwm::Slices::new(pac.PWM, &mut pac.RESETS);
 ```
 
-Get a reference to PWM slice 4 for configuration:
+获取 PWM Slice 4 的引用以进行配置：
 
 ```rust
 let pwm = &mut pwm_slices.pwm4;
 ```
 
-### GPIO to PWM
+### GPIO 到 PWM
 
-I have created a small form that helps you figure out which GPIO pin maps to which PWM channel and also generates sample code.
+我创建了一个小表单，帮助你弄清楚哪个 GPIO 引脚映射到哪个 PWM 通道，并生成示例代码。
 
 <div class="pwm-mapper">
-    <label for="gpio-select"><strong>Select GPIO Pin:</strong></label>
+    <label for="gpio-select"><strong>选择 GPIO 引脚：</strong></label>
     <select id="gpio-select">
-        <option value="">-- Select GPIO --</option>
+        <option value="">-- 选择 GPIO --</option>
     </select>
     <div id="result-container" style="display: none;">
         <div class="pwm-info">
-            <strong>GPIO:</strong> <span id="gpio-value"></span> | 
-            <strong>PWM Slice:</strong> <span id="slice-value"></span> | 
-            <strong>Channel:</strong> <span id="channel-value"></span>
+            <strong>GPIO：</strong> <span id="gpio-value"></span> | 
+            <strong>PWM Slice：</strong> <span id="slice-value"></span> | 
+            <strong>通道：</strong> <span id="channel-value"></span>
         </div>
         <div class="code-header">Embassy</div>
         <pre><code class="rust" id="embassy-code"></code></pre>
@@ -54,23 +54,23 @@ I have created a small form that helps you figure out which GPIO pin maps to whi
         <pre><code class="rust" id="rp-hal-code"></code></pre>
     </div>
     <div id="placeholder" class="placeholder">
-        Select a GPIO pin to see PWM mapping and generated code.
+        选择一个 GPIO 引脚以查看 PWM 映射和生成的代码。
     </div>
 </div>
 
-## Phase-Correct Mode
+## 相位修正模式
 
-In standard PWM (fast PWM), the counter counts up from 0 to TOP, then immediately resets to 0. This creates asymmetric edges where the output changes at different points in the cycle.
+在标准 PWM（快速 PWM）中，计数器从 0 计数到 TOP，然后立即重置为 0。这会产生不对称的边缘，输出在周期的不同点发生变化。
 
-Phase-correct PWM counts up to TOP, then counts back down to 0, creating a triangular waveform. The output switches symmetrically - once going up and once coming down. This produces centered pulses with edges that mirror each other, reducing electromagnetic interference and creating smoother transitions. The trade-off is that phase-correct mode runs at half the frequency of standard PWM for the same TOP value.
+相位修正 PWM 计数到 TOP，然后倒数回 0，产生三角波形。输出对称切换——一次上升，一次下降。这产生中心对齐的脉冲，边缘相互镜像，减少了电磁干扰并产生更平滑的过渡。代价是相位修正模式在相同的 TOP 值下运行频率是标准 PWM 的一半。
 
-Configure PWM4 to operate in phase-correct mode for smoother output transitions.
+配置 PWM4 以在相位修正模式下运行，以获得更平滑的输出过渡。
 
 ```rust
 pwm.set_ph_correct();
 ```
 
-Get a mutable reference to channel B of PWM4 and direct its output to GPIO pin 25.
+获取 PWM4 通道 B 的可变引用，并将其输出指向 GPIO 引脚 25。
 ```rust
 let channel = &mut pwm.channel_b;
 channel.output_to(pins.gpio25);

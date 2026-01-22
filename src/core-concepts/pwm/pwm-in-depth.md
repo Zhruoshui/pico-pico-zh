@@ -1,4 +1,4 @@
-# PWM in Depth
+# 深入理解脉宽调制（PWM）
 
 <style> 
 canvas {
@@ -24,41 +24,41 @@ canvas {
 }   
 </style>
 
-## Timer Operation
+## 定时器工作原理
 
-The timer plays a key role in PWM generation. It counts from zero to a specified maximum value (stored in a register), then resets and starts the cycle over. This counting process determines the duration of one complete cycle, called the period.
+定时器（Timer）在 PWM 生成中起关键作用。它从零计数到指定的最大值（保存在寄存器中），然后复位并重新开始一个循环。这个计数过程决定了一个完整循环的持续时间，称为周期（Period）。
 
-## Compare Value 
+## 比较值（Compare Value）
 
-The timer's hardware continuously compares its current count with a compare value (stored in a register). When the count is less than the compare value, the PWM signal stays HIGH; when the count exceeds the compare value, the signal goes LOW. By changing this compare value, you directly control the duty cycle.
+定时器硬件会持续将当前计数与一个比较值（保存在寄存器中）进行比较。当计数小于比较值时，PWM 信号保持高电平；当计数超过比较值时，信号变为低电平。通过改变这个比较值，你可以直接控制占空比（Duty Cycle）。
 
 
-## PWM Resolution
+## PWM 分辨率（Resolution）
 
-Resolution refers to how precisely the duty cycle can be controlled. This is determined by the range of values the timer counts through in one complete cycle.
+分辨率指的是占空比可控制的精细程度。这由定时器在一个完整周期内计数的取值范围决定。
 
-The timer counts from 0 to a maximum value based on the resolution. The higher the resolution, the more finely the duty cycle can be adjusted.
+定时器根据分辨率从 0 计数到一个最大值。分辨率越高，占空比的调整就越精细。
 
-For a system with **n** bits of resolution, the timer counts from 0 to \\(2^n - 1\\), which gives \\(2^n\\) possible levels for the duty cycle.
+对于具有 **n** 位分辨率的系统，定时器从 0 计数到 \(2^n - 1\)，这为占空比提供了 \(2^n\) 个可能的等级。
 
-For example:
-- 8-bit resolution allows the timer to count from 0 to 255, providing 256 possible duty cycle levels.
-- 10-bit resolution allows the timer to count from 0 to 1023, providing 1024 possible duty cycle levels.
+例如：
+- 8 位分辨率允许定时器从 0 计数到 255，提供 256 个可能的占空比等级。
+- 10 位分辨率允许定时器从 0 计数到 1023，提供 1024 个可能的占空比等级。
 
-Higher resolution gives more precise control over the duty cycle but requires the timer to count through more values within the same period. This creates a trade-off: to maintain the same frequency with higher resolution, you need a faster timer clock, or you must accept a lower frequency.
+更高的分辨率能提供对占空比更精确的控制，但要求在同一周期内定时器需要计数更多的值。这形成了一种权衡：若要在更高分辨率下保持相同频率（Frequency），你需要更快的定时器时钟，或者接受更低的频率。
 
-## Simulation
+## 仿真（Simulation）
 
-You can modify the PWM resolution bits and duty cycle in this simulation. Adjusting the PWM resolution bits increases the maximum count but remains within the time period (it does not affect the duty cycle). Changing the duty cycle adjusts the on and off states accordingly, but it also stays within the period.
+你可以在此仿真中修改 PWM 分辨率位与占空比。调整 PWM 分辨率位会增加最大计数，但仍然受限于时间周期（不会影响占空比）。改变占空比会相应调整高低电平的持续时间，同样保持在该周期内。
  
   <div class="controls">
     <div class="control">
-      <label for="resolution">PWM Resolution (Bits): </label>
+      <label for="resolution">PWM 分辨率（位）：</label>
       <input type="range" id="resolution" min="4" max="20" value="8">
       <input type="number" id="resolutionNumber" min="4" max="20" value="8">
     </div>
     <div class="control">
-      <label for="dutyCycle">Duty Cycle (%): </label>
+      <label for="dutyCycle">占空比（%）：</label>
       <input type="range" id="dutyCycle" min="0" max="100" value="75">
       <input type="number" id="dutyCycleNumber" min="0" max="100" value="75">
     </div>
@@ -68,17 +68,17 @@ You can modify the PWM resolution bits and duty cycle in this simulation. Adjust
     <canvas id="pwmCanvas" width="800" height="150"></canvas>
   </div>
 
-## Relationship Between Duty Cycle, Frequency, and Resolution
+## 占空比、频率与分辨率之间的关系
 
-This diagram shows how duty cycle, frequency, period, pulse width, and resolution work together in PWM generation.  While it may seem a bit complex at first glance, breaking it down helps to clarify these concepts.
+下图展示了占空比、频率、周期、脉冲宽度与分辨率在 PWM 生成中的协同作用。虽然初看略显复杂，但将其拆解能帮助你更好地理解这些概念。
 
-In this example, the timer resolution is 4 bits, meaning the timer counts from 0 to 15 (16 possible values). When the timer reaches its maximum value(i.e 15), an overflow interrupt is triggered (indicated by the blue arrow), and the counter resets to 0. The time it takes for the timer to count from 0 to its maximum value is called as "period".
+在此示例中，定时器分辨率为 4 位，意味着定时器从 0 计数到 15（共 16 个可能值）。当定时器到达最大值（即 15）时，会触发溢出中断（Overflow Interrupt，以蓝色箭头表示），计数器复位为 0。定时器从 0 计数到最大值所需的时间称为周期（Period）。
 
 <img style="display: block; margin: auto;" alt="PWM" src="./images/pwm-duty-cycle-timer.jpg"/>
 
-The duty cycle is configured to 50%, meaning the signal remains high for half the period. At each step in the counting process, the timer compares its current count with the duty cycle's compare value. When the timer count exceeds this compare value (marked by the yellow arrow), the signal transitions from high to low. This triggers the compare interrupt, signaling the state change.
+占空比设置为 50%，即信号在一个周期中有一半时间保持高电平。在计数过程中的每一步，定时器都会将当前计数与占空比的比较值进行比较。当定时器计数超过该比较值（以黄色箭头标记）时，信号从高电平切换为低电平。这会触发比较中断（Compare Interrupt），以指示状态变化。
 
-The time during which the signal is high is referred to as the pulse width.
+信号保持高电平的这段时间称为脉冲宽度（Pulse Width）。
 
   <script>
     const timerCanvas = document.getElementById('timerCanvas');
@@ -170,12 +170,12 @@ The time during which the signal is high is referred to as the pulse width.
 
       timerCtx.font = '16px Arial';
       timerCtx.fillStyle = 'black';
-      timerCtx.fillText(`Resolution: ${resolution} bits`, 10, 20);
-      timerCtx.fillText(`Max Timer Count: ${maxTicks}`, 10, 40);
+      timerCtx.fillText(`分辨率: ${resolution} bits`, 10, 20);
+      timerCtx.fillText(`最大定时器计数值: ${maxTicks}`, 10, 40);
 
       pwmCtx.font = '16px Arial';
       pwmCtx.fillStyle = 'black';
-      pwmCtx.fillText(`Duty Cycle: ${dutyCycle}%`, 10, 20);
+      pwmCtx.fillText(`占空比: ${dutyCycle}%`, 10, 20);
     }
 
     function updateSimulation() {
