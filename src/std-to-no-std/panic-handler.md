@@ -6,7 +6,7 @@
 error: `#[panic_handler]` function required, but not found
 ```
 
-当 Rust 程序发生 panic（恐慌）时，通常由标准库提供的内置 panic 处理器来处理。但在上一步中，我们添加了 `#![no_std]`，这告诉 Rust 不要使用标准库。所以现在，默认情况下没有可用的 panic 处理器。
+当 Rust 程序发生 panic 时，通常由标准库提供的内置 panic 处理器来处理。但在上一步中，我们添加了 `#![no_std]`，这告诉 Rust 不要使用标准库。所以现在，默认情况下没有可用的 panic 处理器。
 
 在 `no_std` 环境中，你需要定义自己的 panic 行为，因为当出错时没有操作系统或运行时来接管。
 

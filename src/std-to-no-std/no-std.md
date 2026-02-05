@@ -6,13 +6,29 @@ Rust 有两个主要的 crate：`std` 和 `core`。
 
 - `core` crate 是一个最小子集。它仅包含最基本的 Rust 功能，例如基本类型（`Option`、`Result` 等）、trait 以及少数其他操作。它不依赖于操作系统或运行时。
 
-当你尝试在这个阶段构建项目时，你会得到一堆错误。如下所示：
+当我们使用 `cargo new <path>` 创建新项目时，Rust 会生成一个标准的 `src/main.rs`：
+
+```rust
+fn main() {
+    println!("Hello, world!");
+}
+
+```
+
+这段代码在你的电脑（Windows/Linux/macOS）上可以完美运行。但是，我们的目标是 RP2350 微控制器。
+
+如果你尝试直接将这段“标准代码”编译为 RP2350 的架构（即 `thumbv8m.main-none-eabihf`），Rust 编译器会立即报错，因为它发现通过默认方式根本无法在裸机上运行标准库：
 
 ```sh
+# 模拟用户尝试交叉编译的指令
+$ cargo build --target thumbv8m.main-none-eabihf
+
 error[E0463]: can't find crate for `std`
   |
   = note: the `thumbv8m.main-none-eabihf` target may not support the standard library
-  = note: `std` is required by `pico_from_scratch` because it does not declare `#![no_std]`
+  = note: `std` is required by `rust_test` because it does not declare `#![no_std]`
+
+error: cannot resolve a prelude import
 
 error: cannot find macro `println` in this scope
  --> src/main.rs:2:5
@@ -23,7 +39,7 @@ error: cannot find macro `println` in this scope
 error: `#[panic_handler]` function required, but not found
 
 For more information about this error, try `rustc --explain E0463`.
-error: could not compile `pico-from-scratch` (bin "pico-from-scratch") due to 3 previous errors
+error: could not compile `rust_test` (bin "rust_test") due to 4 previous errors
 ```
 
 这里有很多错误。让我们逐一修复。第一个错误说目标平台可能不支持标准库。这是真的。我们已经知道了。问题在于，我们没有告诉 Rust 我们不想使用 `std`。这就是 `no_std` 属性发挥作用的地方。
