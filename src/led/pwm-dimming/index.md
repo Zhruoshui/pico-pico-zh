@@ -1,27 +1,27 @@
-# Dimming LED
+# LED 调光
 
-In this section, we will learn how to create a dimming effect(i.e. reducing and increasing the brightness gradually) for an LED using the Raspberry Pi Pico 2. First, we will dim the onboard LED, which is connected to GPIO pin 25 (based on the datasheet). 
+在本节中，我们将学习如何使用 Raspberry Pi Pico 2 为 LED 灯制作调光效果（即逐渐降低与提高亮度）。首先，我们会调暗板载 LED 灯，它连接到 GPIO 引脚 25（依据数据手册）。
 
-To make it dim, we use a technique called PWM (Pulse Width Modulation). You can refer to the intro to the PWM section [here](../../core-concepts/pwm/index.md).
+要让它变暗，我们使用一种名为脉宽调制（PWM）的技术。你可以在这里参考 PWM 部分的介绍：[这里](../../core-concepts/pwm/index.md)。
 
-We will gradually increment the PWM's duty cycle to increase the brightness, then we gradually decrement the PWM duty cycle to  reduce the brightness of the LED. This effectively creates the dimming LED effect. 
+我们会逐步增加 PWM 的占空比（duty cycle）以提高亮度，然后再逐步降低 PWM 占空比以减小 LED 灯的亮度。这样就能实现 LED 调光效果。
 
 
-## The Eye
+## 眼睛
 
+" 
+靠近一点……再近一点……
+
+因为你以为自己看得越多……就越容易被欺骗……
+
+因为，什么是“看见”？……你在看，但你真正做的是过滤、解读、寻找意义……
 "
-Come in close... Closer... 
 
-Because the more you think you see... The easier it’ll be to fool you... 
-
-Because, what is seeing?.... You're looking but what you're really doing is filtering, interpreting, searching for meaning...
-"
-
-Here's the magic: when this switching happens super quickly, our eyes can't keep up. Instead of seeing the blinking, it just looks like the brightness changes! The longer the LED stays ON, the brighter it seems, and the shorter it's ON, the dimmer it looks. It's like tricking your brain into thinking the LED is smoothly dimming or brightening.
+这里的“魔法”是：当这种开关切换非常快时，我们的眼睛跟不上。我们不会看到闪烁，只会觉得亮度在变化！LED 处于 ON 的时间越长，看起来就越亮，ON 的时间越短，看起来就越暗。就像在欺骗大脑，让它以为 LED 在平滑地变暗或变亮。
 
 
-## Core Logic
+## 核心逻辑
 
-What we will do in our program is gradually increase the duty cycle from a low value to a high value in the first loop, with a small delay between each change. This creates the fade-in effect. After that, we run another loop that decreases the duty cycle from high to low, again with a small delay. This creates the fade-out effect.
+在程序中，我们会在第一个循环里将占空比从较低值逐步增加到较高值，并在每次变化之间加入一个小延时。这会产生淡入效果。之后，我们再运行另一个循环，将占空比从高到低逐步降低，同样加入小延时。这会产生淡出效果。
 
-You can use the onboard LED, or if you want to see the dimming more clearly, use an external LED. Just remember to update the PWM slice and channel to match the GPIO pin you are using.
+你可以使用板载 LED 灯，或者如果你想更清楚地看到调光效果，就使用外接 LED 灯。只要记得更新 PWM 的 slice 和 channel，以匹配你正在使用的 GPIO 引脚。

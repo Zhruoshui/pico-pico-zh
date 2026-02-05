@@ -1,4 +1,3 @@
-
 # 脉宽调制（PWM）
 
 <style>
@@ -68,7 +67,8 @@
   }
   #pwmCanvas {
     background-color: #fefefe;
-  } 
+  }hf  
+
 </style>
 
 PWM 代表脉宽调制（Pulse Width Modulation）。它是一种使用在 HIGH 和 LOW 之间快速切换的数字信号来模拟模拟输出的技术。

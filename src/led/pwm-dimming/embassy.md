@@ -1,26 +1,26 @@
-# LED Dimming on Raspberry Pi Pico with Embassy
+# 在 Raspberry Pi Pico 上使用 Embassy 的 LED 灯（LED）调光
 
-Let's create a dimming LED effect using PWM on the Raspberry Pi Pico with Embassy.
+让我们在 Raspberry Pi Pico 上使用 Embassy，通过脉宽调制（PWM）实现 LED 灯（LED）的调光效果。
 
-## Generate project using cargo-generate
+## 使用 cargo-generate 生成项目
 
-By now you should be familiar with the steps. We use the cargo-generate command with our custom template, and when prompted, select Embassy as the HAL.
+到现在你应该已经熟悉这些步骤了。我们使用 cargo-generate 命令配合自定义模板，并在提示时选择 Embassy 作为硬件抽象层（HAL）。
 
 ```sh
 cargo generate --git https://github.com/ImplFerris/pico2-template.git --tag v0.3.1
 ```
 
-## Update Imports
+## 更新导入
 
-Add the import below to bring the PWM types into scope:
+添加下面的导入，将 PWM 类型引入作用域：
 
 ```rust
 use embassy_rp::pwm::{Pwm, SetDutyCycle};
 ```
 
-## Initialize PWM
+## 初始化 PWM
 
-Let's set up the PWM for the LED. Use the first line for the onboard LED, or uncomment the second one if you want to use an external LED on GPIO 16.
+让我们为 LED 灯配置 PWM。使用第一行来驱动板载 LED 灯；如果你想在通用输入输出（GPIO）16 上使用外接 LED 灯，请取消第二行的注释。
 
 ```rust
 // For Onboard LED
@@ -30,9 +30,9 @@ let mut pwm = Pwm::new_output_b(p.PWM_SLICE4, p.PIN_25, Default::default());
 // let mut pwm = Pwm::new_output_a(p.PWM_SLICE0, p.PIN_16, Default::default());
 ```
 
-## Main logic
+## 主逻辑
 
-In the main loop, we create the fade effect by increasing the duty cycle from 0 to 100 percent and then bringing it back down. The small delay between each step makes the dimming smooth. You can adjust the delay and observe how the fade speed changes.
+在主循环中，我们通过将占空比从 0 增加到 100% 再降回去来实现淡入淡出的效果。每一步之间的小延时会让调光更平滑。你可以调整延时，观察淡入淡出的速度如何变化。
 
 ```rust
 loop {
@@ -50,7 +50,7 @@ loop {
 }
 ```
 
-## The full code
+## 完整代码
 
 ```rust
 #![no_std]
@@ -110,9 +110,9 @@ pub static PICOTOOL_ENTRIES: [embassy_rp::binary_info::EntryAddr; 4] = [
 ```
 
 
-## Clone the existing project
+## 克隆现有项目
 
-You can clone the project I created and navigate to the `external-led` folder:
+你可以克隆我创建的项目，并进入 `external-led` 文件夹：
 
 ```sh
 git clone https://github.com/ImplFerris/pico2-embassy-projects

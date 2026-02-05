@@ -1,13 +1,13 @@
-# Dimming LED Program with RP HAL
+# 使用 RP HAL 的 LED 灯（LED）调光程序
 
-rp-hal is an Embedded-HAL for RP series microcontrollers, and can be used as an alternative to the Embassy framework for pico.
+rp-hal 是用于 RP 系列微控制器（MCU）的嵌入式硬件抽象层（Embedded-HAL），可以作为 pico 的 Embassy 框架的替代方案。
 
-This example code is taken from rp235x-hal repo (It also includes additional examples beyond just the blink examples):
+此示例代码取自 rp235x-hal 仓库（它还包含除闪烁示例之外的更多示例）：
 
 ["https://github.com/rp-rs/rp-hal/tree/main/rp235x-hal-examples"](https://github.com/rp-rs/rp-hal/tree/main/rp235x-hal-examples)
 
 
-## The main code
+## 主代码
 
 
 ```rust
@@ -117,9 +117,9 @@ pub static PICOTOOL_ENTRIES: [hal::binary_info::EntryAddr; 5] = [
 // End of file
 ```
 
-## Clone the existing project
+## 克隆现有项目
 
-You can clone the blinky project I created and navigate to the `led-dimming` folder to run this version of the blink program:
+你可以克隆我创建的闪烁项目，并进入 `led-dimming` 文件夹来运行此版本的闪烁程序：
 
 ```sh
 git clone https://github.com/ImplFerris/pico2-rp-projects
