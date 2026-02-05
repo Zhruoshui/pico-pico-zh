@@ -1,6 +1,6 @@
-# Simulation - LED Dimming with PWM
+# 仿真 - PWM 控制 LED 调光
 
-Here is a simulation to show the dimming effect on an LED based on the duty cycle and the High and Low parts of the square wave. I set the default speed very slow so it is clear and not annoying to watch. To start it, click the “Start animation” button. You can increase the speed by reducing the delay time and watching the changes.
+这是一个仿真演示，展示了基于**占空比（Duty Cycle）**以及**方波（Square Wave）**的高电平和低电平部分对 LED 的调光效果。我将默认速度设置得很慢，以便清晰观察且观感舒适。点击“开始动画”按钮即可运行。你可以通过减少延迟时间来提高速度，并观察由此产生的变化。
 
 <style>
 .pwm-container {
@@ -207,24 +207,24 @@ Here is a simulation to show the dimming effect on an LED based on the duty cycl
             <div class="pwm-led" id="pwm-led"></div>
         </div>
         <div class="pwm-duty-info">
-            <div class="pwm-duty-label">Duty Cycle</div>
+            <div class="pwm-duty-label">占空比</div>
             <div class="pwm-duty-cycle" id="pwm-dutyCycle">0%</div>
-            <div class="pwm-phase" id="pwm-phase">Ready to start</div>
+            <div class="pwm-phase" id="pwm-phase">准备开始</div>
         </div>
     </div>
     <div class="pwm-waveform-section">
-        <div class="pwm-waveform-title">PWM Square Wave Signal</div>
+        <div class="pwm-waveform-title">PWM 方波信号</div>
         <canvas id="pwm-waveform" width="800" height="150"></canvas>
     </div>
     <div class="pwm-controls-section">
         <div class="pwm-speed-control">
-            <div class="pwm-speed-label">Animation Speed</div>
-            <div class="pwm-speed-value" id="pwm-speedValue">Medium (50ms)</div>
+            <div class="pwm-speed-label">动画速度</div>
+            <div class="pwm-speed-value" id="pwm-speedValue">中等 (50ms)</div>
             <input type="range" id="pwm-speedSlider" min="20" max="200" value="200" step="10">
         </div>
         <div class="pwm-buttons">
-            <button id="pwm-startBtn">Start Animation</button>
-            <button id="pwm-stopBtn" disabled>Stop</button>
+            <button id="pwm-startBtn">开始动画</button>
+            <button id="pwm-stopBtn" disabled>停止</button>
         </div>
     </div>
 </div>
@@ -250,11 +250,11 @@ Here is a simulation to show the dimming effect on an LED based on the duty cycl
     function updateSpeedDisplay() {
         const speed = parseInt(speedSlider.value);
         let label;
-        if (speed <= 40) label = 'Very Fast';
-        else if (speed <= 70) label = 'Fast';
-        else if (speed <= 100) label = 'Medium';
-        else if (speed <= 150) label = 'Slow';
-        else label = 'Very Slow';
+        if (speed <= 40) label = '极快';
+        else if (speed <= 70) label = '快';
+        else if (speed <= 100) label = '中等';
+        else if (speed <= 150) label = '慢';
+        else label = '极慢';
         speedValue.textContent = `${label} (${speed}ms)`;
         animationSpeed = speed;
     }
@@ -298,8 +298,8 @@ Here is a simulation to show the dimming effect on an LED based on the duty cycl
         // Draw voltage labels
         ctx.fillStyle = '#555';
         ctx.font = '11px monospace';
-        ctx.fillText('HIGH', 8, highVoltage + 15);
-        ctx.fillText('LOW', 8, lowVoltage + 5);
+        ctx.fillText('高', 8, highVoltage + 15);
+        ctx.fillText('低', 8, lowVoltage + 5);
         
         // Draw duty cycle percentage on waveform
         ctx.fillStyle = '#ff5555';
@@ -349,7 +349,7 @@ Here is a simulation to show the dimming effect on an LED based on the duty cycl
 
     async function pwmLoop() {
         while (animationRunning) {
-            phaseDisplay.textContent = 'Fading In...';
+            phaseDisplay.textContent = '渐亮...';
             for (let i = 0; i <= 100 && animationRunning; i++) {
                 setDutyCycle(i);
                 await sleep(animationSpeed);
@@ -357,7 +357,7 @@ Here is a simulation to show the dimming effect on an LED based on the duty cycl
             
             if (!animationRunning) break;
             
-            phaseDisplay.textContent = 'Fading Out...';
+            phaseDisplay.textContent = '渐暗...';
             for (let i = 100; i >= 0 && animationRunning; i--) {
                 setDutyCycle(i);
                 await sleep(animationSpeed);
@@ -365,7 +365,7 @@ Here is a simulation to show the dimming effect on an LED based on the duty cycl
             
             if (!animationRunning) break;
             
-            phaseDisplay.textContent = 'Paused (1500ms)';
+            phaseDisplay.textContent = '暂停 (1500ms)';
             await sleep(1500);
         }
     }
@@ -386,7 +386,7 @@ Here is a simulation to show the dimming effect on an LED based on the duty cycl
         startBtn.disabled = false;
         stopBtn.disabled = true;
         speedSlider.disabled = false;
-        phaseDisplay.textContent = 'Stopped';
+        phaseDisplay.textContent = '已停止';
     });
 
     updateSpeedDisplay();
